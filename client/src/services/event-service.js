@@ -20,5 +20,8 @@ export default {
   //APP INFO
   getDays() {
     return apiClient.get("/admin/days");
+  },
+  getDivisions(someId) {
+    return apiClient.get(`/admin/days/${someId}/divisions`)
   }
 };

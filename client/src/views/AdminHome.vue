@@ -38,13 +38,13 @@
             <p class="ml-3">Add new division</p>
           </router-link>
         </div>
-        <div class="d-flex flex-row" v-if="days">
+        <div class="d-flex flex-row flex-wrap" v-if="divisions">
           <button
-            v-for="day in days.days"
-            :key="day._id"
+            v-for="division in divisions.divisions"
+            :key="divisions._id"
             class="btn btn-outline-dark mx-2"
           >
-            {{ day.name }}
+            {{ division.name }}
           </button>
         </div>
       </div>
@@ -60,20 +60,25 @@ export default {
     return {
       dayId: null,
       displayDivisions: false
+      // divisions: null
     };
   },
   methods: {
     showDivisions(dayId) {
+      // this.$store.dispatch("clearDivisions");
       this.displayDivisions = true;
       this.dayId = dayId;
       console.log(dayId);
+      this.$store.dispatch("fetchDivisions", dayId);
+      console.log(this.$store.state.divisions);
     }
   },
   created() {
     this.$store.dispatch("getDays");
   },
   computed: {
-    ...mapState(["days"])
+    ...mapState(["divisions", "days"])
+    // ...mapState([])
   }
 };
 </script>

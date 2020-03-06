@@ -8,7 +8,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: null,
-    days: null
+    days: null,
+    divisions: null
   },
   mutations: {
     SET_USER_DATA(state, userData) {
@@ -26,6 +27,13 @@ export default new Vuex.Store({
     //ADMIN
     SET_DAYS(state, daysData) {
       state.days = daysData
+    },
+    SET_DIVISIONS(state, divisionsData) {
+      state.divisions = divisionsData
+      // console.log('call from mutations: ' + state.divisions)
+    },
+    CLEAR_DIVISIONS(state) {
+      state.divisions = null
     }
   },
   actions: {
@@ -67,6 +75,24 @@ export default new Vuex.Store({
       }).catch(err => {
         console.log(err)
       })
+    },
+    fetchDivisions({
+      commit
+    }, dayId) {
+      services.getDivisions(dayId)
+        .then(res => {
+          let responseObj = JSON.parse(JSON.stringify(res.data))
+          console.log(responseObj)
+          commit('SET_DIVISIONS', responseObj)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    clearDivisions({
+      commit
+    }) {
+      commit("CLEAR_DIVISIONS")
     }
   },
   getters: {
