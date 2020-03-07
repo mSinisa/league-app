@@ -40,7 +40,6 @@
           </router-link>
         </div>
         <div class="d-flex flex-row flex-wrap" v-if="divisions">
-          {{ divisions }}
           <button
             v-for="division in divisions.divisions"
             :key="divisions._id"
@@ -100,12 +99,9 @@ export default {
   },
   methods: {
     showDivisions(dayId) {
-      // this.$store.dispatch("clearDivisions");
       this.displayDivisions = true;
       this.dayId = dayId;
-      console.log("dayId: " + dayId + "type of: " + typeof dayId);
       this.$store.dispatch("fetchDivisions", dayId);
-      // console.log(this.$store.state.divisions);
     },
     showTeams(divisionId) {
       this.displayTeams = true;

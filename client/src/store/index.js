@@ -89,7 +89,7 @@ export default new Vuex.Store({
       services.getDivisions(dayId)
         .then(res => {
           let responseObj = JSON.parse(JSON.stringify(res.data))
-          console.log(responseObj + 'divisions response')
+          console.log(responseObj.divisions + 'divisions response')
           commit('SET_DIVISIONS', responseObj)
         })
         .catch(err => {
@@ -107,11 +107,11 @@ export default new Vuex.Store({
       dayId,
       divisionId
     }) {
-      console.log(dayId, divisionId)
+      console.log("ids: " + dayId, divisionId)
       services.getTeams(dayId, divisionId)
         .then(res => {
           // let responseObj = JSON.parse(JSON.stringify(res.data))
-          let responseObj = JSON.stringify(res.data)
+          let responseObj = JSON.parse(JSON.stringify(res.data))
           console.log(responseObj)
           commit('SET_TEAMS', responseObj)
         })
