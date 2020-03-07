@@ -2,6 +2,11 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 let divisionSchema = new Schema({
+    // _id: {
+    //     type: mongoose.Types.ObjectId,
+    //     required: true
+    // },
+
     name: {
         type: String,
         unique: true

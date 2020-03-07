@@ -9,7 +9,8 @@ export default new Vuex.Store({
   state: {
     user: null,
     days: null,
-    divisions: null
+    divisions: null,
+    teams: null
   },
   mutations: {
     SET_USER_DATA(state, userData) {
@@ -32,9 +33,13 @@ export default new Vuex.Store({
       state.divisions = divisionsData
       // console.log('call from mutations: ' + state.divisions)
     },
-    CLEAR_DIVISIONS(state) {
-      state.divisions = null
-    }
+    // CLEAR_DIVISIONS(state) {
+    //   state.divisions = null
+    // }
+    SET_TEAMS(state, teamsData) {
+      state.teams = teamsData
+      // console.log('call from mutations: ' + state.divisions)
+    },
   },
   actions: {
     register({
@@ -71,7 +76,9 @@ export default new Vuex.Store({
       commit
     }) {
       services.getDays().then(res => {
+        console.log(JSON.parse(JSON.stringify(res.data)) + 'days res obj') //same as below
         commit("SET_DAYS", res.data);
+        // commit("SET_DAYS", JSON.parse(JSON.stringify(res.data)));
       }).catch(err => {
         console.log(err)
       })
@@ -82,18 +89,36 @@ export default new Vuex.Store({
       services.getDivisions(dayId)
         .then(res => {
           let responseObj = JSON.parse(JSON.stringify(res.data))
-          console.log(responseObj)
+          console.log(responseObj + 'divisions response')
           commit('SET_DIVISIONS', responseObj)
         })
         .catch(err => {
           console.log(err)
         })
     },
-    clearDivisions({
+    // clearDivisions({
+    //   commit
+    // }) {
+    //   commit("CLEAR_DIVISIONS")
+    // }
+    fetchTeams({
       commit
+    }, {
+      dayId,
+      divisionId
     }) {
-      commit("CLEAR_DIVISIONS")
-    }
+      console.log(dayId, divisionId)
+      services.getTeams(dayId, divisionId)
+        .then(res => {
+          // let responseObj = JSON.parse(JSON.stringify(res.data))
+          let responseObj = JSON.stringify(res.data)
+          console.log(responseObj)
+          commit('SET_TEAMS', responseObj)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
   },
   getters: {
     loggedIn(state) {

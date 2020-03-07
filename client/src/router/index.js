@@ -7,6 +7,7 @@ import Register from '../views/Register'
 import AdminHome from '../views/AdminHome'
 import NewDay from '../views/day/New'
 import NewDivision from '../views/division/New'
+import NewTeam from '../views/team/New'
 
 Vue.use(VueRouter)
 
@@ -47,8 +48,12 @@ const routes = [{
     path: '/admin/days/:dayId/divisions/new',
     name: 'NewDivision',
     component: NewDivision
+  },
+  {
+    path: '/admin/days/:dayId/divisions/:divisionId/teams/new',
+    name: 'NewTeam',
+    component: NewTeam
   }
-
 ]
 
 const router = new VueRouter({
