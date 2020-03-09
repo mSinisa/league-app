@@ -10,7 +10,8 @@ export default new Vuex.Store({
     user: null,
     days: null,
     divisions: null,
-    teams: null
+    teams: null,
+    team: null
   },
   mutations: {
     SET_USER_DATA(state, userData) {
@@ -40,6 +41,9 @@ export default new Vuex.Store({
       state.teams = teamsData
       // console.log('call from mutations: ' + state.divisions)
     },
+    SET_TEAM(state, teamData) {
+      state.team = teamData
+    }
   },
   actions: {
     register({
@@ -107,18 +111,38 @@ export default new Vuex.Store({
       dayId,
       divisionId
     }) {
-      console.log("ids: " + dayId, divisionId)
+      console.log("ids from fetchTeams: " + dayId, divisionId)
       services.getTeams(dayId, divisionId)
         .then(res => {
           // let responseObj = JSON.parse(JSON.stringify(res.data))
           let responseObj = JSON.parse(JSON.stringify(res.data))
-          console.log(responseObj)
+          // console.log('res obj from fetch teams ' + responseObj)
           commit('SET_TEAMS', responseObj)
         })
         .catch(err => {
           console.log(err)
         })
     },
+
+    fetchTeam({
+      commit
+    }, {
+      dayId,
+      divisionId,
+      teamId
+    }) {
+      console.log('ids from fetchTeam: ' + teamId)
+      services.getTeam(dayId, divisionId, teamId)
+        .then(res => {
+          console.log(res.data)
+          let responseObj = JSON.parse(JSON.stringify(res.data))
+          console.log(responseObj)
+          commit('SET_TEAM', responseObj)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   },
   getters: {
     loggedIn(state) {

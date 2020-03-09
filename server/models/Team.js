@@ -8,7 +8,7 @@ let teamSchema = new Schema({
     },
     players: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Player'
+        ref: 'User'
     }]
 })
 

@@ -59,4 +59,17 @@ router.post('/', (req, res) => {
     })
 })
 
+//SHOW TEAM
+router.get('/:teamId', (req, res, next) => {
+    Team.findById(req.params.teamId).populate('players').exec((err, foundTeam) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.json({
+                team: foundTeam
+            })
+        }
+    })
+})
+
 module.exports = router

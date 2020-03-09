@@ -30,5 +30,8 @@ export default {
   },
   getTeams(dayId, divisionId) {
     return apiClient.get(`/admin/days/${dayId}/divisions/${divisionId}/teams`)
+  },
+  getTeam(dayId, divisionId, teamId) {
+    return apiClient.get(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}`)
   }
 };

@@ -8,6 +8,7 @@ import AdminHome from '../views/AdminHome'
 import NewDay from '../views/day/New'
 import NewDivision from '../views/division/New'
 import NewTeam from '../views/team/New'
+import ShowTeam from '../views/team/Show'
 
 Vue.use(VueRouter)
 
@@ -53,6 +54,11 @@ const routes = [{
     path: '/admin/days/:dayId/divisions/:divisionId/teams/new',
     name: 'NewTeam',
     component: NewTeam
+  },
+  {
+    path: '/admin/days/:dayId/divisions/:divisionId/teams/:teamId',
+    name: 'ShowTeam',
+    component: ShowTeam
   }
 ]
 

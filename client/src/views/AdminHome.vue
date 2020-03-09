@@ -72,13 +72,28 @@
           </router-link>
         </div>
         <div class="d-flex flex-row flex-wrap" v-if="teams">
-          <button
+          <!-- <button
             v-for="team in teams.teams"
             :key="team._id"
             class="btn btn-outline-dark mx-2"
           >
             {{ team.name }}
-          </button>
+          </button> -->
+
+          <router-link
+            v-for="team in teams.teams"
+            :key="team._id"
+            :to="{
+              name: 'ShowTeam',
+              params: {
+                dayId: dayId,
+                divisionId: divisionId,
+                teamId: team._id
+              }
+            }"
+            class="btn btn-outline-dark mx-2"
+            >{{ team.name }}</router-link
+          >
         </div>
       </div>
     </div>
@@ -118,7 +133,6 @@ export default {
   },
   computed: {
     ...mapState(["divisions", "days", "teams"])
-    // ...mapState([])
   }
 };
 </script>
