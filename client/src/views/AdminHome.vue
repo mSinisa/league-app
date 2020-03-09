@@ -4,10 +4,10 @@
       <div class="card-header">Leagues</div>
       <div class="card-body text-secondary">
         <div>
-          <router-link :to="{ name: 'NewDay' }" class="d-flex flex-row">
+          <!-- <router-link :to="{ name: 'NewDay' }" class="d-flex flex-row">
             <i class="far fa-plus-square fa-2x"></i>
             <p class="ml-3">Add new league</p>
-          </router-link>
+          </router-link> -->
         </div>
         <div class="d-flex flex-row" v-if="days">
           <!-- {{ days }} -->
@@ -31,13 +31,13 @@
       <div class="card-header">Divisions</div>
       <div class="card-body text-secondary">
         <div>
-          <router-link
+          <!-- <router-link
             :to="{ name: 'NewDivision', params: { dayId: dayId } }"
             class="d-flex flex-row"
           >
             <i class="far fa-plus-square fa-2x"></i>
             <p class="ml-3">Add new division</p>
-          </router-link>
+          </router-link> -->
         </div>
         <div class="d-flex flex-row flex-wrap" v-if="divisions">
           <button
@@ -68,7 +68,7 @@
             class="d-flex flex-row"
           >
             <i class="far fa-plus-square fa-2x"></i>
-            <p class="ml-3">Add new team</p>
+            <p class="ml-3">Create new team</p>
           </router-link>
         </div>
         <div class="d-flex flex-row flex-wrap" v-if="teams">

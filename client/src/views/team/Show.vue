@@ -1,7 +1,10 @@
 <template>
   <div class="hello">
     <div v-if="team">
-      <h1>Team page {{ team.team.name }}</h1>
+      <h4> {{ team.team.name }}</h4>
+    </div>
+    <p v-if="division">Divison: {{ division.name }}</p>
+    <p>Players:</p>
     </div>
   </div>
 </template>
@@ -10,18 +13,16 @@
 import { mapState } from "vuex";
 
 export default {
-  //   props: ["dayId", "divisionId", "teamId"],
   created() {
-    // console.log(dayId);
-    // console.log(this.$route.params);
     this.$store.dispatch("fetchTeam", {
       dayId: this.$route.params.dayId,
       divisionId: this.$route.params.divisionId,
       teamId: this.$route.params.teamId
-    });
+    })
+    this.$store.dispatch('fetchDivision', {dayId: this.$route.params.dayId, divisionId: this.$route.params.divisionId})
   },
   computed: {
-    ...mapState(["team"])
+    ...mapState(["team", "divisions", "division"])
   }
 };
 </script>

@@ -48,4 +48,15 @@ router.post("/", (req, res) => {
   });
 });
 
+//SHOW
+router.get('/:divisionId', (req, res, next) => {
+  Division.findById(req.params.divisionId, (err, foundDivision) => {
+    if (err) {
+      console.log(err)
+    } else {
+      res.send(foundDivision)
+    }
+  })
+})
+
 module.exports = router;
