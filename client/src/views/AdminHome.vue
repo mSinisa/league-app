@@ -114,6 +114,7 @@ export default {
   methods: {
     showDivisions(dayId) {
       this.displayDivisions = true;
+      this.displayTeams = false;
       this.dayId = dayId;
       this.$store.dispatch("fetchDivisions", dayId);
     },
