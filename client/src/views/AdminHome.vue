@@ -57,19 +57,19 @@
       v-if="displayTeams"
     >
       <div class="card-header">Teams</div>
+      <div class="card-header">
+        <router-link
+          :to="{
+            name: 'NewTeam',
+            params: { dayId: dayId, divisionId: divisionId }
+          }"
+          class="d-flex flex-row align-items-center"
+        >
+          <i class="far fa-plus-square fa-2x"></i>
+          <p class="ml-2 mb-0">Add new team</p>
+        </router-link>
+      </div>
       <div class="card-body text-secondary">
-        <div>
-          <router-link
-            :to="{
-              name: 'NewTeam',
-              params: { dayId: dayId, divisionId: divisionId }
-            }"
-            class="d-flex flex-row"
-          >
-            <i class="far fa-plus-square fa-2x"></i>
-            <p class="ml-3">Create new team</p>
-          </router-link>
-        </div>
         <div class="d-flex flex-row flex-wrap" v-if="teams">
           <!-- <button
             v-for="team in teams.teams"
