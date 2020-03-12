@@ -14,10 +14,11 @@ let userSchema = new Schema({
         required: true
     },
     phoneNumber: String,
-    // teamName: String,
+    teams: [],
     firstName: String,
     lastName: String,
-    role: String
+    role: String,
+    primaryClub: String
 })
 
 module.exports = mongoose.model('User', userSchema)

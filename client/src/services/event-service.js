@@ -36,5 +36,8 @@ export default {
   },
   getDivision(dayId, divisionId) {
     return apiClient.get(`/admin/days/${dayId}/divisions/${divisionId}`)
+  },
+  getAllPlayers() {
+    return apiClient.get('/admin')
   }
 };

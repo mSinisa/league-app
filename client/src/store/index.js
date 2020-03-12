@@ -13,7 +13,8 @@ export default new Vuex.Store({
     teams: null,
     //Team show
     team: null,
-    division: null
+    division: null,
+    allPlayers: null
   },
   mutations: {
     SET_USER_DATA(state, userData) {
@@ -40,6 +41,9 @@ export default new Vuex.Store({
     },
     SET_DIVISION(state, divisionData) {
       state.division = divisionData
+    },
+    SET_ALL_PLAYERS(state, playersData) {
+      state.allPlayers = playersData
     }
   },
   actions: {
@@ -139,6 +143,15 @@ export default new Vuex.Store({
         })
         .catch(err => {
           console.log(err)
+        })
+    },
+    fetchAllPlayers({
+      commit
+    }) {
+      services.getAllPlayers()
+        .then(res => {
+          let responseObj = JSON.parse(JSON.stringify(res.data))
+          commit('SET_ALL_PLAYERS', responseObj)
         })
     }
   },

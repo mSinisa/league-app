@@ -5,12 +5,19 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const verifyToken = require('../../middleware/checkAuth')
 const User = require('../../models/User')
+// const Team = require('../../models/Team')
 
-router.get('/', (req, res) => {
-    res.status(200).json({
-        message: 'hello from home page'
-    })
-})
+// router.get('/', (req, res) => {
+//     User.find({}, (err, foundUsers) => {
+//         if (err) {
+//             console.log(err)
+//         } else {
+//             res.json({
+//                 allPlayers: foundUsers
+//             })
+//         }
+//     })
+// })
 
 router.post('/register', (req, res) => {
     User.find({
@@ -32,7 +39,10 @@ router.post('/register', (req, res) => {
                         const user = new User({
                             _id: new mongoose.Types.ObjectId(),
                             email: req.body.email,
-                            password: hashedPassword
+                            password: hashedPassword,
+                            firstName: req.body.firstName,
+                            lastName: req.body.lastName,
+                            primaryClub: req.body.primaryClub
                         })
                         user
                             .save()
@@ -41,6 +51,26 @@ router.post('/register', (req, res) => {
                                 const token = jwt.sign({
                                     user
                                 }, 'the_secret_key')
+                                // Team.find({
+                                //     'name': {
+                                //         $in: [user.teams[0], user.teams[1]]
+                                //     }
+                                // }, (err, foundTeams) => {
+                                //     if (err) {
+                                //         console.log(err)
+                                //     } else {
+                                //         foundTeams.forEach(team => {
+                                //             team.players.push({
+                                //                 _id: user._id,
+                                //                 email: user.email,
+                                //                 firstName: user.firstName,
+                                //                 lastName: user.lastName,
+                                //                 teams: user.teams
+                                //             })
+                                //             team.save()
+                                //         })
+                                //     }
+                                // })
                                 res.status(201).json({
                                     message: 'Successfuly created user',
                                     token: token,

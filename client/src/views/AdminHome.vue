@@ -10,7 +10,6 @@
           </router-link> -->
         </div>
         <div class="d-flex flex-row" v-if="days">
-          <!-- {{ days }} -->
           <button
             v-for="day in days.days"
             :key="day._id"

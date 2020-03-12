@@ -28,35 +28,42 @@
           v-model="phoneNumber"
         />
       </div>
-      <label>Teams</label>
-      <div class="input-group mb-3" v-if="teams.length > 1">
-        <div class="input-group-prepend">
-          <label class="input-group-text" for="inputGroupSelect01"
-            >Select:
-          </label>
-        </div>
+
+      <label for="teamSelect">Primary club:</label>
+      <div class="input-group mb-3">
         <select
           class="custom-select"
-          id="inputGroupSelect01"
-          v-model="teamName"
+          id="teamSelect"
+          v-model="primaryClub"
+          required="true"
         >
-          <!-- <option selected>Choose...</option> -->
-          <option
-            v-for="team in teams"
-            :key="team"
-            :value="team"
-            name="teamName"
-            >{{ team }}</option
-          >
-          <!-- <option value="2">Two</option> -->
-          <!-- <option value="3">Three</option> -->
+          <option v-for="(club, index) in clubs" :value="club">{{
+            club
+          }}</option>
         </select>
       </div>
 
-      <!-- <div class="form-group">
-                <label for="teamCode">Team Code</label>
-                <input type="text" class="form-control" name="teamCode" />
-            </div> -->
+      <!-- <label for="teamSelect">Secondary club:</label>
+      <div class="input-group mb-3">
+        <select class="custom-select" id="teamSelect" v-model="clubOne">
+          <option v-for="(club, index) in clubs" value="club">{{
+            club
+          }}</option>
+        </select>
+      </div> -->
+
+      <!-- <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="teamSelect2">Team 2</label>
+        </div>
+        <select class="custom-select" id="teamSelect2" v-model="teamTwo">
+          <option selected>Choose...</option>
+          <option v-for="team in allTeams" :key="team._id" :value="team.name">{{
+            team.name
+          }}</option>
+        </select>
+      </div> -->
+
       <div class="form-group">
         <label for="lastName">Email</label>
         <input type="email" class="form-control" name="email" v-model="email" />
@@ -80,36 +87,59 @@
 </template>
 
 <script>
-// import axios from "axios";
+import { mapState } from "vuex";
 
 export default {
   data() {
     return {
-      teams: [],
+      primaryClub: null,
+      // teamTwo: null,
       email: null,
       password: null,
       phoneNumber: null,
       firstName: null,
       lastName: null,
-      teamName: null
+      teamName: null,
+      clubs: [
+        "Indian Trail",
+        "Fort Lee",
+        "Haworth",
+        "Upper Ridgewood",
+        "Brookside",
+        "Nyack",
+        "Englewood",
+        "Washington Township",
+        "Waldwick",
+        "Alpine",
+        "Maywood",
+        "Fairlawn",
+        "Hackensack",
+        "Tenafly",
+        "Knickerbocker"
+      ]
     };
   },
   methods: {
     register() {
+      // if (!this.teamTwo && this.teamOne) {
+      //   this.teams.push(this.teamOne);
+      // } else if (this.teamOne && this.teamTwo) {
+      //   this.teams.push(this.teamOne);
+      //   this.teams.push(this.teamTwo);
+      // }
       this.$store
         .dispatch("register", {
           email: this.email,
           password: this.password,
           firstName: this.firstName,
-          lastName: this.lastName
+          lastName: this.lastName,
+          primaryClub: this.primaryClub,
+          phoneNumber: this.phoneNumber
         })
         .then(() => {
           this.$router.push({ name: "About" });
         });
     }
-  },
-  created() {
-    // this.getTeams()
   }
 };
 </script>
