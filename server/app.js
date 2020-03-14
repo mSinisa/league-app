@@ -8,6 +8,7 @@ const adminRoutes = require("./routes/admin/admin");
 const dayRoutes = require("./routes/admin/days");
 const divisionRoutes = require('./routes/admin/divisions');
 const teamRoutes = require('./routes/admin/teams')
+const teamPlayerRoutes = require('./routes/admin/teamPlayers')
 
 const app = express();
 
@@ -29,7 +30,8 @@ app.use(userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/admin/days", dayRoutes);
 app.use("/admin/days/:dayId/divisions", divisionRoutes);
-app.use('/admin/days/:dayId/divisions/:divisionId/teams', teamRoutes) //ithink this one because it gets called in  in the fron end 
+app.use('/admin/days/:dayId/divisions/:divisionId/teams', teamRoutes)
+app.use('/admin/days/:dayId/divisions/:divisionId/teams/:teamId/teamPlayers', teamPlayerRoutes)
 //SERVER
 const port = 8082
 app.listen(port, () => {

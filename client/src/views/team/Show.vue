@@ -1,7 +1,11 @@
 <template>
   <div class="hello">
     <div v-if="team">
-      <h4>{{ team.team.name }}</h4>
+      <h4>{{ team.name }}</h4>
+      <h5>Players:</h5>
+      <p v-for="player in team.players" :key="player._id">
+        {{ player.firstName }} {{ player.lastName }}
+      </p>
     </div>
 
     <p v-if="division">Divison: {{ division.name }}</p>
@@ -46,6 +50,7 @@
 
 <script>
 import { mapState } from "vuex";
+import services from "../../services/event-service";
 
 export default {
   data() {
@@ -69,6 +74,30 @@ export default {
       if (!this.selectedPlayer) {
         this.message = "Please select a player to add";
       } else {
+        this.$store.dispatch("addTeamPlayer", {
+          dayId: this.$route.params.dayId,
+          divisionId: this.$route.params.divisionId,
+          teamId: this.$route.params.teamId,
+          playerId: this.selectedPlayer
+        });
+        // services.addPlayer(
+        //   this.$route.params.dayId,
+        //   this.$route.params.divisionId,
+        //   this.$route.params.teamId,
+        //   {
+        //     _id: this.selectedPlayer
+        //   }
+        // );
+        // .then(res => {
+        //   console.log("Show page: " + res);
+        // });
+        // .catch(err => {
+        //   let errMsgArrLength = err.message.split(" ").length;
+        //   let errMsgNum = err.message.split(" ")[errMsgArrLength - 1];
+        //   if (errMsgNum == 409) {
+        //     this.message = "This player is already in the team";
+        //   }
+        // });
       }
     },
     hideMessage() {
@@ -89,6 +118,9 @@ export default {
   },
   computed: {
     ...mapState(["team", "division", "allPlayers"])
+  },
+  watch: {
+    // team
   }
 };
 </script>

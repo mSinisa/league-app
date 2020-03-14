@@ -37,13 +37,20 @@ export default new Vuex.Store({
       state.teams = teamsData
     },
     SET_TEAM(state, teamData) {
-      state.team = teamData
+      // state.team = teamData
+      Vue.set(state, 'team', teamData)
     },
     SET_DIVISION(state, divisionData) {
       state.division = divisionData
     },
     SET_ALL_PLAYERS(state, playersData) {
       state.allPlayers = playersData
+    },
+    UPDATE_TEAM(state, updatedTeamData) {
+      console.log('team in state: ' + JSON.stringify(state.team))
+      console.log('updatedTeam: ' + JSON.stringify(updatedTeamData))
+      // state.team = updatedTeamData
+      Vue.set(state, 'team', updatedTeamData)
     }
   },
   actions: {
@@ -124,7 +131,8 @@ export default new Vuex.Store({
       console.log('ids from fetchTeam: ' + teamId)
       services.getTeam(dayId, divisionId, teamId)
         .then(res => {
-          let responseObj = JSON.parse(JSON.stringify(res.data))
+          // let responseObj = JSON.parse(JSON.stringify(res.data))
+          let responseObj = JSON.parse(JSON.stringify(res.data.team))
           commit('SET_TEAM', responseObj)
         })
         .catch(err => {
@@ -152,6 +160,28 @@ export default new Vuex.Store({
         .then(res => {
           let responseObj = JSON.parse(JSON.stringify(res.data))
           commit('SET_ALL_PLAYERS', responseObj)
+        })
+    },
+    addTeamPlayer({
+      commit
+    }, {
+      dayId,
+      divisionId,
+      teamId,
+      playerId
+    }) {
+      services.addPlayer(dayId, divisionId, teamId, {
+          _id: playerId
+        })
+        .then(res => {
+          if (!res.hasError) {
+            let updatedTeam = JSON.parse(JSON.stringify(res.res.data.updatedTeam))
+            // console.log(updatedTeam)
+            // commit('UPDATE_TEAM', updatedTeam)
+            commit('SET_TEAM', updatedTeam)
+          } else {
+            console.log(res)
+          }
         })
     }
   },
