@@ -44,17 +44,17 @@ export default {
   addPlayer(dayId, divisionId, teamId, data) {
     // console.log(data)
     return apiClient.post(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}/teamPlayers`, data)
-      .then(res => {
-        return {
-          res: res,
-          hasError: false
-        }
-      })
-      .catch(err => {
-        return {
-          err: err,
-          hasError: true
-        }
-      })
+    // .then(res => {
+    //   return {
+    //     res: res,
+    //     hasError: false
+    //   }
+    // })
+    // .catch(err => {
+    //   return {
+    //     err: err,
+    //     hasError: true
+    //   }
+    // })
   }
 };

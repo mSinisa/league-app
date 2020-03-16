@@ -2,13 +2,12 @@
   <div class="hello">
     <div v-if="team">
       <h4>{{ team.name }}</h4>
+      <h4 v-if="division">Divison: {{ division.name }}</h4>
       <h5>Players:</h5>
       <p v-for="player in team.players" :key="player._id">
         {{ player.firstName }} {{ player.lastName }}
       </p>
     </div>
-
-    <p v-if="division">Divison: {{ division.name }}</p>
 
     <h5>Players</h5>
 
@@ -43,6 +42,10 @@
         <span v-if="message"
           >{{ message }} <i @click="hideMessage" class="far fa-times-circle"></i
         ></span>
+        <span v-else-if="backendErrorMessage"
+          >{{ backendErrorMessage }}
+          <i @click="deleteBackendMessage" class="far fa-times-circle"></i
+        ></span>
       </div>
     </div>
   </div>
@@ -51,6 +54,7 @@
 <script>
 import { mapState } from "vuex";
 import services from "../../services/event-service";
+import { mapSetters } from "vuex";
 
 export default {
   data() {
@@ -102,6 +106,10 @@ export default {
     },
     hideMessage() {
       this.message = null;
+      // this.$store.errorMeesage = null;
+    },
+    deleteBackendMessage() {
+      this.$store.dispatch("deleteBackendErrorMessage");
     }
   },
   created() {
@@ -117,7 +125,7 @@ export default {
     this.$store.dispatch("fetchAllPlayers");
   },
   computed: {
-    ...mapState(["team", "division", "allPlayers"])
+    ...mapState(["team", "division", "allPlayers", "backendErrorMessage"])
   },
   watch: {
     // team

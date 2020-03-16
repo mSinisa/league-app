@@ -14,7 +14,8 @@ export default new Vuex.Store({
     //Team show
     team: null,
     division: null,
-    allPlayers: null
+    allPlayers: null,
+    backendErrorMessage: null
   },
   mutations: {
     SET_USER_DATA(state, userData) {
@@ -37,8 +38,8 @@ export default new Vuex.Store({
       state.teams = teamsData
     },
     SET_TEAM(state, teamData) {
-      // state.team = teamData
-      Vue.set(state, 'team', teamData)
+      state.team = teamData
+      // Vue.set(state, 'team', teamData)
     },
     SET_DIVISION(state, divisionData) {
       state.division = divisionData
@@ -46,11 +47,11 @@ export default new Vuex.Store({
     SET_ALL_PLAYERS(state, playersData) {
       state.allPlayers = playersData
     },
-    UPDATE_TEAM(state, updatedTeamData) {
-      console.log('team in state: ' + JSON.stringify(state.team))
-      console.log('updatedTeam: ' + JSON.stringify(updatedTeamData))
-      // state.team = updatedTeamData
-      Vue.set(state, 'team', updatedTeamData)
+    SET_BACKEND_ERR_MESSAGE(state, errMessage) {
+      state.backendErrorMessage = errMessage
+    },
+    DELETE_BACKEND_MESSAGE(state) {
+      state.backendErrorMessage = null
     }
   },
   actions: {
@@ -174,21 +175,31 @@ export default new Vuex.Store({
           _id: playerId
         })
         .then(res => {
-          if (!res.hasError) {
-            let updatedTeam = JSON.parse(JSON.stringify(res.res.data.updatedTeam))
-            // console.log(updatedTeam)
-            // commit('UPDATE_TEAM', updatedTeam)
-            commit('SET_TEAM', updatedTeam)
+          let updatedTeam = JSON.parse(JSON.stringify(res.data.updatedTeam))
+          commit('SET_TEAM', updatedTeam)
+        })
+        .catch(err => {
+          console.log('err: ' + err)
+          //err msg from back end
+          let errArrLength = err.message.split(' ').length
+          let errNum = err.message.split(' ')[errArrLength - 1]
+          if (errNum == 409) {
+            let errMessage = 'This player is already in the team'
+            commit('SET_BACKEND_ERR_MESSAGE', errMessage)
           } else {
-            console.log(res)
+            console.log(`new err: ${err}`)
           }
         })
+    },
+    deleteBackendErrorMessage({
+      commit
+    }) {
+      commit('DELETE_BACKEND_MESSAGE')
     }
   },
   getters: {
     loggedIn(state) {
       return !!state.user;
     }
-  },
-  modules: {}
+  }
 });

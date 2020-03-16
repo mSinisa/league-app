@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
             // Division.findById({
             //     _id: ObjectID(req.params.divisionId)
             // }).populate('teams').exec((err, foundDivision) => {
-            console.log(foundDivision);
+            // console.log(foundDivision);
             if (err) {
                 console.log(err);
             } else {
@@ -25,15 +25,6 @@ router.get("/", (req, res) => {
             }
         });
 });
-// router.get('/', (req, res) => {
-//     Division.findOne(req.params.divisionId, (err, foundTeam => {
-//         if (err) {
-//             console.log(err)
-//         } else {
-//             console.log(foundTeam)
-//         }
-//     }))
-// })
 
 //NEW TEAM
 router.post("/", (req, res) => {
