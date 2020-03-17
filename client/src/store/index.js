@@ -195,6 +195,25 @@ export default new Vuex.Store({
       commit
     }) {
       commit('DELETE_BACKEND_MESSAGE')
+    },
+
+    removeTeamPlayer({
+      commit
+    }, {
+      dayId,
+      divisionId,
+      teamId,
+      playerId
+    }) {
+      console.log(playerId + ' player id')
+      services.removeTeamPlayer(dayId, divisionId, teamId, playerId).then(res => {
+          let updatedTeam = JSON.parse(JSON.stringify(res.data.updatedTeam))
+          console.log(updatedTeam)
+          commit('SET_TEAM', updatedTeam)
+        })
+        .catch(err => {
+          console.log(`err in delete: ${err}`)
+        })
     }
   },
   getters: {

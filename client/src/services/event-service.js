@@ -41,20 +41,10 @@ export default {
     return apiClient.get('/admin')
   },
   //add player to team
-  addPlayer(dayId, divisionId, teamId, data) {
-    // console.log(data)
-    return apiClient.post(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}/teamPlayers`, data)
-    // .then(res => {
-    //   return {
-    //     res: res,
-    //     hasError: false
-    //   }
-    // })
-    // .catch(err => {
-    //   return {
-    //     err: err,
-    //     hasError: true
-    //   }
-    // })
+  addPlayer(dayId, divisionId, teamId, playerId) {
+    return apiClient.post(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}/teamPlayers`, playerId)
+  },
+  removeTeamPlayer(dayId, divisionId, teamId, playerId) {
+    return apiClient.delete(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}/teamPlayers/${playerId}`)
   }
 };

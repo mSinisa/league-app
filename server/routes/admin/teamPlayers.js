@@ -53,52 +53,25 @@ router.post("/", (req, res, next) => {
         }
     });
 
-    // Team.findById(req.params.teamId, (err, foundTeam) => {
-    //     if (err) {
-    //         console.log(err);
-    //     } else {
-    //         console.log(req.body)
-    //         User.findById(req.body._id, (err, foundPlayer) => {
-    //             if (err) {
-    //                 console.log(err);
-    //             } else {
-    //                 let hasPlayerId = false;
-
-    //                 foundTeam.players.forEach(player => {
-    //                     if (JSON.stringify(player) === JSON.stringify(foundPlayer._id)) {
-    //                         hasPlayerId = true;
-    //                     }
-    //                 });
-
-    //                 if (hasPlayerId) {
-    //                     res.status(409)
-    //                         .json({
-    //                             message: "This player is already part of the team"
-    //                         })
-    //                 } else {
-    //                     let clubName;
-    //                     if (foundTeam.name.split(" ").length == 2) {
-    //                         clubName = foundTeam.name.split(" ")[0];
-    //                     } else {
-    //                         let str = foundTeam.name.split(" ");
-    //                         clubName = `${str[0]} ${str[1]}`;
-    //                     }
-    //                     foundPlayer.teams.push(clubName);
-    //                     foundPlayer.save();
-    //                     foundTeam.players.push(foundPlayer);
-    //                     foundTeam.save();
-
-    //                     res
-    //                         .json({
-    //                             message: "Successfully added player to the team",
-    //                             updatedTeam: foundTeam
-    //                         })
-    //                         .status(200);
-    //                 }
-    //             }
-    //         });
-    //     }
-    // });
 });
+
+router.delete('/:playerId', (req, res) => {
+    Team.findById(req.params.teamId).populate('players').exec((err, foundTeam) => {
+        if (err) {
+            console.log(err)
+        } else {
+            // console.log(foundTeam.players)
+            let updatedTeam = foundTeam.players.filter(player => {
+                return JSON.stringify(player._id) !== JSON.stringify(req.params.playerId)
+            })
+            foundTeam.players = updatedTeam;
+            foundTeam.save()
+            res.json({
+                updatedTeam: foundTeam,
+                message: 'Successfully removed player'
+            }).status(200)
+        }
+    })
+})
 
 module.exports = router;
