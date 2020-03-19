@@ -95,6 +95,34 @@ export default new Vuex.Store({
       })
     },
     // --------------------------------------     DIVISIONS ----------------------------------
+    fetchDivisions({
+      commit
+    }, dayId) {
+      services.getDivisions(dayId)
+        .then(res => {
+          let responseObj = JSON.parse(JSON.stringify(res.data.divisions))
+          // console.log(responseObj.divisions + 'divisions response')
+          commit('SET_DIVISIONS', responseObj)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    fetchDivision({
+      commit
+    }, {
+      dayId,
+      divisionId
+    }) {
+      services.getDivision(dayId, divisionId)
+        .then(res => {
+          console.log(res.data)
+          commit('SET_DIVISION', res.data.division)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     createDivision({
       commit,
       dispatch
@@ -127,19 +155,13 @@ export default new Vuex.Store({
           // }
         })
     },
-    fetchDivisions({
-      commit
-    }, dayId) {
-      services.getDivisions(dayId)
-        .then(res => {
-          let responseObj = JSON.parse(JSON.stringify(res.data.divisions))
-          // console.log(responseObj.divisions + 'divisions response')
-          commit('SET_DIVISIONS', responseObj)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    },
+    editDivision({
+      commit,
+      dispatch
+    }, {
+      dayId,
+      divisionId,
+    }) {},
     deleteDivision({
       commit,
       dispatch
@@ -165,6 +187,8 @@ export default new Vuex.Store({
           })
         })
     },
+
+    // ---------------------------- TEAMS -----------------------------------
     fetchTeams({
       commit
     }, {
@@ -174,7 +198,7 @@ export default new Vuex.Store({
       // console.log("ids from fetchTeams: " + dayId, divisionId)
       services.getTeams(dayId, divisionId)
         .then(res => {
-          let responseObj = JSON.parse(JSON.stringify(res.data))
+          let responseObj = JSON.parse(JSON.stringify(res.data.teams))
           commit('SET_TEAMS', responseObj)
         })
         .catch(err => {
@@ -194,20 +218,6 @@ export default new Vuex.Store({
           // let responseObj = JSON.parse(JSON.stringify(res.data))
           let responseObj = JSON.parse(JSON.stringify(res.data.team))
           commit('SET_TEAM', responseObj)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    },
-    fetchDivision({
-      commit
-    }, {
-      dayId,
-      divisionId
-    }) {
-      services.getDivision(dayId, divisionId)
-        .then(res => {
-          commit('SET_DIVISION', res.data)
         })
         .catch(err => {
           console.log(err)

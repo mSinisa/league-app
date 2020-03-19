@@ -7,6 +7,7 @@ import Register from '../views/Register'
 import AdminHome from '../views/AdminHome'
 import NewDay from '../views/day/New'
 import NewDivision from '../views/division/New'
+import EditDivision from '../views/division/Edit'
 import NewTeam from '../views/team/New'
 import ShowTeam from '../views/team/Show'
 
@@ -49,6 +50,12 @@ const routes = [{
     path: '/admin/days/:dayId/divisions/new',
     name: 'NewDivision',
     component: NewDivision,
+    props: true
+  },
+  {
+    path: '/admin/days/:dayId/divisions/:divisionId/edit',
+    name: 'EditDivision',
+    component: EditDivision,
     props: true
   },
   {

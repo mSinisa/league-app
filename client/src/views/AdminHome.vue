@@ -51,10 +51,21 @@
           <p class="m-0">Add new division</p>
         </router-link>
       </div>
-      <div class="card-footer" v-if="showDeleteDivision">
+      <div class="card-footer" v-if="showDeleteAndEditDivision">
         <button @click="deleteDivision" class="btn btn-outline-danger m-0">
           Delete Division
         </button>
+        <router-link
+          :to="{
+            name: 'EditDivision',
+            params: { dayId: dayId, divisionId: divisionId }
+          }"
+          class="btn btn-outline-warning mt-2 mb-0 mx-0"
+          :dayId="dayId"
+          :divisionId="divisionId"
+        >
+          Edit Division
+        </router-link>
       </div>
     </div>
 
@@ -79,7 +90,7 @@
       <div class="card-body text-secondary">
         <div class="d-flex flex-row flex-wrap" v-if="teams">
           <router-link
-            v-for="team in teams.teams"
+            v-for="team in teams"
             :key="team._id"
             :to="{
               name: 'ShowTeam',
@@ -107,7 +118,7 @@ export default {
       dayId: null,
       displayDivisions: false,
       displayTeams: false,
-      showDeleteDivision: false
+      showDeleteAndEditDivision: false
       // divisions: null
     };
   },
@@ -115,7 +126,7 @@ export default {
     showDivisions(dayId) {
       this.displayDivisions = true;
       this.displayTeams = false;
-      this.showDeleteDivision = false;
+      this.showDeleteAndEditDivision = false;
       this.dayId = dayId;
       this.$store.dispatch("fetchDivisions", dayId);
     },
@@ -124,12 +135,13 @@ export default {
         dayId: this.dayId,
         divisionId: this.divisionId
       });
-      this.showDeleteDivision = false;
+      this.showDeleteAndEditDivision = false;
     },
+    // editDivision() {},
     showTeams(divisionId) {
       this.displayTeams = true;
       this.divisionId = divisionId;
-      this.showDeleteDivision = true;
+      this.showDeleteAndEditDivision = true;
       // console.log("divisionId: " + divisionId);
       this.$store.dispatch("fetchTeams", {
         dayId: this.dayId,

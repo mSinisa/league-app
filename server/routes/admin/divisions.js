@@ -67,25 +67,40 @@ router.get('/:divisionId', (req, res) => {
     if (err) {
       console.log(err)
     } else {
-      res.send(foundDivision)
+      console.log(foundDivision)
+      res.json({
+        division: foundDivision
+      })
     }
   })
 })
-//GET BACK TO ONCE DELETED TO DISPLAY PROPER DIVISIONS
+
+//EDIT
+router.put('/:divisionId/edit', (req, res) => {
+  if (req.params.divisionId && req.params.dayId) {
+
+  } else {
+    res.sendStatus(400)
+  }
+})
+
+//DELETE
 router.delete('/:divisionId', (req, res) => {
   if (req.params.divisionId && req.params.dayId) {
+    //DELETE Division reference from Day
     Day.findById(req.params.dayId).populate('divisions').exec((err, foundDay) => {
       if (err) {
         console.log(err)
+        res.sendStatus(400)
       } else {
-        console.log('before ' + foundDay.divisions)
         let updatedDivisions = foundDay.divisions.filter(division => JSON.stringify(division._id) !== JSON.stringify(req.params.divisionId))
         foundDay.divisions = updatedDivisions
         foundDay.save()
-
+        //DELETE Division record
         Division.findByIdAndRemove(req.params.divisionId, (err, deletedDivision) => {
           if (err) {
             console.log(err)
+            res.sendStatus(400)
           } else {
             res.json({
               updatedDivisions: foundDay.divisions,
@@ -98,35 +113,6 @@ router.delete('/:divisionId', (req, res) => {
         })
       }
     })
-
-
-
-    // Division.findByIdAndRemove(req.params.divisionId, (err, deletedDivision) => {
-    //   if (err) {
-    //     res.sendStatus(400)
-    //   } else {
-    //     //DIVISION has been deleted
-    //     //next step -> delete it's reference from Day
-    //     Day.findById(req.params.dayId, (err, foundDay) => {
-    //       if (err) {
-    //         res.sendStatus(400)
-    //       } else {
-    //         // console.log('before save: ' + foundDay.divisions)
-    //         let updatedDivisions = foundDay.divisions.filter(division => JSON.stringify(division) !== JSON.stringify(req.params.divisionId))
-    //         foundDay.divisions = updatedDivisions
-    //         foundDay.save()
-
-    //         res.json({
-    //           updatedDivisions: foundDay.divisions,
-    //           notification: {
-    //             message: 'Successfully deleted division',
-    //             type: 'success'
-    //           }
-    //         })
-    //       }
-    //     })
-    //   }
-    // })
   } else {
     res.sendStatus(400)
   }
