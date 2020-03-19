@@ -29,7 +29,6 @@
 <script>
 export default {
   props: ["dayId"],
-
   data() {
     return {
       name: null,
@@ -41,51 +40,28 @@ export default {
   methods: {
     create() {
       if (this.name && this.dayId) {
-        this.$store.dispatch("createDivision", {
-          data: { name: this.name },
-          dayId: this.dayId
-        });
+        this.$store
+          .dispatch("createDivision", {
+            data: { name: this.name },
+            dayId: this.dayId
+          })
+          .then(() => (this.name = null));
       } else if (!this.name) {
         let notification = {
           type: "error",
-          message: "Please add a name"
+          message: "Please add Division name"
         };
-        this.$store.dispatch("notification/add", notification);
+        this.$store.dispatch("notification/add", notification, { root: true });
       } else {
         let notification = {
           type: "error",
           message: "There was an error with your request"
         };
-        this.$store.dispatch("notification/add", notification);
+        this.$store.dispatch("notification/add", notification, { root: true });
         this.$router.push({ name: "AdminHome" });
       }
-
-      // services
-      //   .createDivision(
-      //     { name: this.name, description: this.description },
-      //     this.$route.params.dayId
-      //   )
-      //   .then(res => {
-      //     if (res.status === 200) {
-      //       this.$router.push({ name: "AdminHome" });
-      //     } else {
-      //       console.log(res);
-      //     }
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   });
     }
-  },
-  created() {
-    // this.$store.dispatch("getDays");
-  },
-  computed: {
-    // ...mapState(["days"])
   }
-  // mounted() {
-  //   console.log(this.dayId);
-  // }
 };
 </script>
 

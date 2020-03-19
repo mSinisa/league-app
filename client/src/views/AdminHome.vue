@@ -29,7 +29,19 @@
     >
       <div class="card-header">Divisions</div>
       <!-- HHHHHHHHHHHHHHEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRREEEEEEEEEEEEEEEEEEEEEEEEEEEE -->
-      <div class="card-header">
+      <div class="card-body text-secondary">
+        <div class="d-flex flex-row flex-wrap" v-if="divisions">
+          <button
+            v-for="division in divisions"
+            :key="division._id"
+            class="btn btn-outline-dark mx-2"
+            @click.prevent="showTeams(division._id)"
+          >
+            {{ division.name }}
+          </button>
+        </div>
+      </div>
+      <div class="card-footer">
         <router-link
           :to="{ name: 'NewDivision', params: { dayId: dayId } }"
           :dayId="dayId"
@@ -39,17 +51,10 @@
           <p class="m-0">Add new division</p>
         </router-link>
       </div>
-      <div class="card-body text-secondary">
-        <div class="d-flex flex-row flex-wrap" v-if="divisions">
-          <button
-            v-for="division in divisions.divisions"
-            :key="divisions._id"
-            class="btn btn-outline-dark mx-2"
-            @click.prevent="showTeams(division._id)"
-          >
-            {{ division.name }}
-          </button>
-        </div>
+      <div class="card-footer" v-if="showDeleteDivision">
+        <button @click="deleteDivision" class="btn btn-outline-danger m-0">
+          Delete Division
+        </button>
       </div>
     </div>
 
@@ -73,14 +78,6 @@
       </div>
       <div class="card-body text-secondary">
         <div class="d-flex flex-row flex-wrap" v-if="teams">
-          <!-- <button
-            v-for="team in teams.teams"
-            :key="team._id"
-            class="btn btn-outline-dark mx-2"
-          >
-            {{ team.name }}
-          </button> -->
-
           <router-link
             v-for="team in teams.teams"
             :key="team._id"
@@ -93,8 +90,8 @@
               }
             }"
             class="btn btn-outline-dark mx-2"
-            >{{ team.name }}</router-link
-          >
+            >{{ team.name }}
+          </router-link>
         </div>
       </div>
     </div>
@@ -109,7 +106,8 @@ export default {
     return {
       dayId: null,
       displayDivisions: false,
-      displayTeams: false
+      displayTeams: false,
+      showDeleteDivision: false
       // divisions: null
     };
   },
@@ -117,13 +115,22 @@ export default {
     showDivisions(dayId) {
       this.displayDivisions = true;
       this.displayTeams = false;
+      this.showDeleteDivision = false;
       this.dayId = dayId;
       this.$store.dispatch("fetchDivisions", dayId);
+    },
+    deleteDivision() {
+      this.$store.dispatch("deleteDivision", {
+        dayId: this.dayId,
+        divisionId: this.divisionId
+      });
+      this.showDeleteDivision = false;
     },
     showTeams(divisionId) {
       this.displayTeams = true;
       this.divisionId = divisionId;
-      console.log("divisionId: " + divisionId);
+      this.showDeleteDivision = true;
+      // console.log("divisionId: " + divisionId);
       this.$store.dispatch("fetchTeams", {
         dayId: this.dayId,
         divisionId: this.divisionId

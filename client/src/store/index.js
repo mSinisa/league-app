@@ -1,9 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import router from '../router/index'
 import services from '../services/event-service'
 import * as notification from '@/store/modules/notification'
 Vue.use(Vuex);
+Vue.use(router)
 
 export default new Vuex.Store({
   state: {
@@ -92,6 +94,7 @@ export default new Vuex.Store({
         console.log(err)
       })
     },
+    // --------------------------------------     DIVISIONS ----------------------------------
     createDivision({
       commit,
       dispatch
@@ -99,24 +102,29 @@ export default new Vuex.Store({
       dayId,
       data
     }) {
-      // console.log(data, dayId)
       services.createDivision(data, dayId).then(res => {
-
-          console.log(res.data, res.status)
+          let responseDivisions = JSON.parse(JSON.stringify(res.data.divisions))
+          commit('SET_DIVISIONS', responseDivisions)
+          dispatch('notification/add', res.data.notification, {
+            root: true
+          })
+          router.push({
+            name: 'AdminHome'
+          })
         })
         .catch(err => {
           console.log(err)
-          let errMessageArr = err.message.split(' ')
-          let errNumber = errMessageArr[errMessageArr.length - 1]
-          if (errNumber == 409) {
-            let notification = {
-              message: `There was a problem creating division`,
-              type: 'error'
-            }
-            dispatch('notification/add', notification, {
-              root: true
-            })
+          // let errMessageArr = err.message.split(' ')
+          // let errNumber = errMessageArr[errMessageArr.length - 1]
+          // if (errNumber == 409) {
+          let notification = {
+            message: `There was a problem creating division`,
+            type: 'error'
           }
+          dispatch('notification/add', notification, {
+            root: true
+          })
+          // }
         })
     },
     fetchDivisions({
@@ -124,12 +132,37 @@ export default new Vuex.Store({
     }, dayId) {
       services.getDivisions(dayId)
         .then(res => {
-          let responseObj = JSON.parse(JSON.stringify(res.data))
+          let responseObj = JSON.parse(JSON.stringify(res.data.divisions))
           // console.log(responseObj.divisions + 'divisions response')
           commit('SET_DIVISIONS', responseObj)
         })
         .catch(err => {
           console.log(err)
+        })
+    },
+    deleteDivision({
+      commit,
+      dispatch
+    }, {
+      dayId,
+      divisionId
+    }) {
+      services.deleteDivision(dayId, divisionId)
+        .then(res => {
+          let responseDivisions = JSON.parse(JSON.stringify(res.data.updatedDivisions))
+          commit('SET_DIVISIONS', responseDivisions)
+          dispatch('notification/add', res.data.notification, {
+            root: true
+          })
+        })
+        .catch(err => {
+          let notification = {
+            type: 'error',
+            message: 'There was a problem when deleting division'
+          }
+          dispatch('notification/add', notification, {
+            root: true
+          })
         })
     },
     fetchTeams({
@@ -138,7 +171,7 @@ export default new Vuex.Store({
       dayId,
       divisionId
     }) {
-      console.log("ids from fetchTeams: " + dayId, divisionId)
+      // console.log("ids from fetchTeams: " + dayId, divisionId)
       services.getTeams(dayId, divisionId)
         .then(res => {
           let responseObj = JSON.parse(JSON.stringify(res.data))

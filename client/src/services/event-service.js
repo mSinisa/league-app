@@ -25,8 +25,8 @@ export default {
   getDays() {
     return apiClient.get("/admin/days");
   },
-  getDivisions(someId) {
-    return apiClient.get(`/admin/days/${someId}/divisions`)
+  getDivisions(dayId) {
+    return apiClient.get(`/admin/days/${dayId}/divisions`)
   },
   getTeams(dayId, divisionId) {
     return apiClient.get(`/admin/days/${dayId}/divisions/${divisionId}/teams`)
@@ -36,6 +36,9 @@ export default {
   },
   getDivision(dayId, divisionId) {
     return apiClient.get(`/admin/days/${dayId}/divisions/${divisionId}`)
+  },
+  deleteDivision(dayId, divisionId) {
+    return apiClient.delete(`/admin/days/${dayId}/divisions/${divisionId}`)
   },
   getAllPlayers() {
     return apiClient.get('/admin')
