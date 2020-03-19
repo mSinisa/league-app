@@ -28,16 +28,18 @@
       v-if="displayDivisions"
     >
       <div class="card-header">Divisions</div>
+      <!-- HHHHHHHHHHHHHHEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRREEEEEEEEEEEEEEEEEEEEEEEEEEEE -->
+      <div class="card-header">
+        <router-link
+          :to="{ name: 'NewDivision', params: { dayId: dayId } }"
+          :dayId="dayId"
+          class="d-flex flex-row align-items-center"
+        >
+          <i class="far fa-plus-square fa-2x mr-2"></i>
+          <p class="m-0">Add new division</p>
+        </router-link>
+      </div>
       <div class="card-body text-secondary">
-        <div>
-          <!-- <router-link
-            :to="{ name: 'NewDivision', params: { dayId: dayId } }"
-            class="d-flex flex-row"
-          >
-            <i class="far fa-plus-square fa-2x"></i>
-            <p class="ml-3">Add new division</p>
-          </router-link> -->
-        </div>
         <div class="d-flex flex-row flex-wrap" v-if="divisions">
           <button
             v-for="division in divisions.divisions"

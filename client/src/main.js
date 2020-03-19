@@ -6,9 +6,11 @@ import axios from 'axios'
 import vuetify from './plugins/vuetify'
 import NavTop from '@/components/NavTop'
 import NavBottom from '@/components/NavBottom'
+import NotificationContainer from '@/components/NotificationContainer'
 
 Vue.component('NavTop', NavTop)
 Vue.component('NavBottom', NavBottom)
+Vue.component('NotificationContainer', NotificationContainer)
 
 Vue.config.productionTip = false
 

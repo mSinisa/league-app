@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import services from '../services/event-service'
-
+import * as notification from '@/store/modules/notification'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -39,7 +39,6 @@ export default new Vuex.Store({
     },
     SET_TEAM(state, teamData) {
       state.team = teamData
-      // Vue.set(state, 'team', teamData)
     },
     SET_DIVISION(state, divisionData) {
       state.division = divisionData
@@ -92,6 +91,33 @@ export default new Vuex.Store({
       }).catch(err => {
         console.log(err)
       })
+    },
+    createDivision({
+      commit,
+      dispatch
+    }, {
+      dayId,
+      data
+    }) {
+      // console.log(data, dayId)
+      services.createDivision(data, dayId).then(res => {
+
+          console.log(res.data, res.status)
+        })
+        .catch(err => {
+          console.log(err)
+          let errMessageArr = err.message.split(' ')
+          let errNumber = errMessageArr[errMessageArr.length - 1]
+          if (errNumber == 409) {
+            let notification = {
+              message: `There was a problem creating division`,
+              type: 'error'
+            }
+            dispatch('notification/add', notification, {
+              root: true
+            })
+          }
+        })
     },
     fetchDivisions({
       commit
@@ -220,5 +246,8 @@ export default new Vuex.Store({
     loggedIn(state) {
       return !!state.user;
     }
+  },
+  modules: {
+    notification
   }
 });

@@ -1,16 +1,26 @@
 <template>
   <div id="app">
     <NavTop />
+    <NotificationContainer />
     <router-view />
     <NavBottom />
   </div>
 </template>
 
 <script>
-export default {
-  // created() {
-  //   this.$store.dispatch("getDays");
-  // }
-};
+export default {};
 </script>
-<style></style>
+<style>
+.-text-primary {
+  color: #39b982;
+}
+.-text-base {
+  color: #000;
+}
+.-text-error {
+  color: tomato;
+}
+.-text-gray {
+  color: rgba(0, 0, 0, 0.5);
+}
+</style>

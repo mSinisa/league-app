@@ -48,7 +48,8 @@ const routes = [{
   {
     path: '/admin/days/:dayId/divisions/new',
     name: 'NewDivision',
-    component: NewDivision
+    component: NewDivision,
+    props: true
   },
   {
     path: '/admin/days/:dayId/divisions/:divisionId/teams/new',

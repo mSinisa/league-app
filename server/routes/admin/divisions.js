@@ -21,31 +21,43 @@ router.get("/", (req, res) => {
 
 //NEW
 router.post("/", (req, res) => {
-  Day.findById(req.params.dayId, (err, foundDay) => {
-    if (err) {
-      console.log(`err found when searching for day: ${err}`);
-    } else {
-      let newDivison = {
-        name: req.body.name,
-        division: req.body.division
-      };
+  if (req.params.dayId) {
+    Day.findById(req.params.dayId, (err, foundDay) => {
+      if (err) {
+        console.log(`err found when searching for day: ${err}`);
+        res.sendStatus(400)
+      } else {
+        let newDivison = {
+          name: req.body.name
+          // division: req.body.division
+        };
 
-      Division.create(newDivison, (err, createdDivision) => {
-        if (err) {
-          res.json({
-            message: `there was an error ${err}`
-          });
-        } else {
-          foundDay.divisions.push(createdDivision);
-          foundDay.save();
-          res.json({
-            message: "successfully created new division",
-            // status: 201
-          });
-        }
-      });
-    }
-  });
+        Division.create(newDivison, (err, createdDivision) => {
+          if (err) {
+            res.sendStatus(400)
+            //NOT BEING SENT TO THE CLIENT FOR SOME REASON
+            // .json({
+            //   notification: {
+            //     message: `there was an error ${err.message}`,
+            //     type: 'error'
+            //   }
+            // })
+          } else {
+            foundDay.divisions.push(createdDivision);
+            foundDay.save();
+            res.json({
+              message: {
+                text: "Successfully created new division",
+                type: 'success'
+              }
+            });
+          }
+        });
+      }
+    });
+  } // else {
+  //   res.sendStatus(400)
+  // }
 });
 
 //SHOW
