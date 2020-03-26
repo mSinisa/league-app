@@ -7,7 +7,7 @@
 
 			<div class="card-body text-secondary">
 				<div class="d-flex flex-row flex-wrap" v-if="days">
-					<button v-for="day in days" :key="day._id" class="btn btn-outline-dark mx-2"
+					<button v-for="(day, index) in days" :key="day._id" class="btn btn-outline-dark mx-2"
 						@click.prevent="saveIdOfSelectedDay(day._id); setDayDivisions(day._id); 
 						showDivisions(); hideTeams(); showDeleteDay()">
 						{{ day.name }}
@@ -74,7 +74,8 @@
 				</router-link>
 
 				<div v-if="displayDeleteAndEditDivision">
-					<button @click="deleteDivision" class="btn btn-outline-danger m-0">
+					<button @click="deleteDivision(); hideDeleteAndEditDivision(); hideTeams(); hideDivisions()" 
+						class="btn btn-outline-danger m-0">
 						Delete Division
 					</button>
 
@@ -161,6 +162,9 @@ export default {
 		showDeleteAndEditDivision(){
 			this.displayDeleteAndEditDivision = true
 		},
+		hideDeleteAndEditDivision(){
+			this.displayDeleteAndEditDivision = false
+		},
 		showDeleteDay(){
 			this.displayDeleteDay = true
 		},
@@ -175,10 +179,9 @@ export default {
 		},	  	  
       	deleteDivision() {
         	this.$store.dispatch("deleteDivision", {
-          	dayId: this.dayId,
-          	divisionId: this.divisionId
-        	});
-        	this.showDeleteAndEditDivision = false;
+          		dayId: this.selectedDayId,
+          		divisionId: this.selectedDivisionId
+			})	
       	}
     },
     created() {

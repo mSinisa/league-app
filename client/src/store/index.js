@@ -43,6 +43,13 @@ export default new Vuex.Store({
         DELETE_DAY_FROM_DAYS(state, deletedDay) {
             state.days = state.days.filter(day => day._id !== deletedDay._id)
         },
+        UPDATE_DAY(state, updatedDay) {
+            let indexOfDay = state.days.findIndex(day => day._id == updatedDay._id)
+            state.days[indexOfDay] = updatedDay
+        },
+        DELETE_DIVISION_FROM_DIVISIONS(state, deletedDivision) {
+            state.allDivisions = state.allDivisions.filter(division => division._id !== deletedDivision._id)
+        },
 
 
 
@@ -118,6 +125,15 @@ export default new Vuex.Store({
             .catch(err => console.log(err))
         },
         // --------------------------------------     DIVISIONS ----------------------------------
+        createDivision({ commit, dispatch }, { dayId, name }) {
+            services.createDivision(name, dayId)
+            .then(res => {
+                commit('UPDATE_DAY', res.data.updatedDay)
+                dispatch('notification/add', res.data.notification, { root: true})
+                router.push({ name: 'AdminHome' })
+            })
+            .catch(err => console.log(err))
+        },
         // fetchDivisions({
         //     commit
         // }, dayId) {
@@ -146,38 +162,8 @@ export default new Vuex.Store({
         //             console.log(err)
         //         })
         // },
-        createDivision({
-            commit,
-            dispatch
-        }, {
-            dayId,
-            data
-        }) {
-            services.createDivision(data, dayId).then(res => {
-                    let responseDivisions = JSON.parse(JSON.stringify(res.data.divisions))
-                    commit('SET_DIVISIONS', responseDivisions)
-                    dispatch('notification/add', res.data.notification, {
-                        root: true
-                    })
-                    router.push({
-                        name: 'AdminHome'
-                    })
-                })
-                .catch(err => {
-                    console.log(err)
-                    // let errMessageArr = err.message.split(' ')
-                    // let errNumber = errMessageArr[errMessageArr.length - 1]
-                    // if (errNumber == 409) {
-                    let notification = {
-                        message: `There was a problem creating division`,
-                        type: 'error'
-                    }
-                    dispatch('notification/add', notification, {
-                        root: true
-                    })
-                    // }
-                })
-        },
+
+
         editDivision({
             commit,
             dispatch
@@ -185,25 +171,18 @@ export default new Vuex.Store({
             dayId,
             divisionId,
         }) {},
-        deleteDivision({
-            commit,
-            dispatch
-        }, {
-            dayId,
-            divisionId
-        }) {
+
+        deleteDivision({ commit, dispatch }, { dayId, divisionId }) {
             services.deleteDivision(dayId, divisionId)
                 .then(res => {
-                    let responseDivisions = JSON.parse(JSON.stringify(res.data.updatedDivisions))
-                    commit('SET_DIVISIONS', responseDivisions)
-                    dispatch('notification/add', res.data.notification, {
-                        root: true
-                    })
+                    commit('UPDATE_DAY', res.data.updatedDay)
+                    commit('DELETE_DIVISION_FROM_DIVISIONS', res.data.deletedDivision)
+                    dispatch('notification/add', res.data.notification, { root: true })
                 })
                 .catch(err => {
                     let notification = {
                         type: 'error',
-                        message: 'There was a problem when deleting division'
+                        message: `There was a problem when deleting division: ${err} `
                     }
                     dispatch('notification/add', notification, {
                         root: true

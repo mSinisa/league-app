@@ -23,9 +23,8 @@ export default {
   deleteLeagueDay(dayId) {
     return apiClient.delete(`/admin/days/${dayId}`)
   },
-
-  createDivision(data, dayId) {
-    return apiClient.post(`/admin/days/${dayId}/divisions`, data);
+  createDivision(name, dayId) {
+    return apiClient.post(`/admin/days/${dayId}/divisions`, name)
   },
 
   createTeam(data, dayId, divisionId) {

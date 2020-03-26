@@ -7,7 +7,6 @@ let divisionSchema = new Schema({
         unique: true,
         required: true
     },
-    // description: String,
     teams: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Team'

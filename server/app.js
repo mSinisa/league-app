@@ -12,7 +12,8 @@ const teamPlayerRoutes = require('./routes/admin/teamPlayers')
 
 const app = express();
 
-mongoose.connect("mongodb+srv://sm:sina123@cluster0-pxdmd.mongodb.net/leagueNew?retryWrites=true&w=majority", {
+mongoose.connect("mongodb+srv://sm:sina123@cluster0-pxdmd.mongodb.net/leagueNew?retryWrites=true&w=majority", 
+    {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
@@ -25,7 +26,6 @@ app.use(bodyParser.json());
 app.use(cors());
 
 //ROUTES
-// which route is the one that fail ? line 32 ? 
 app.use(userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/admin/days", dayRoutes);

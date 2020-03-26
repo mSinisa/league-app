@@ -46,6 +46,11 @@ router.post('/', (req, res, next) => {
 
 router.delete('/:dayId', (req, res, next) => {
     if(req.params.dayId){
+        //find day and populate divisions
+        //for each division populate teams
+        //delete teams
+        //delete divisions
+        //delete day
         Day.findByIdAndDelete(req.params.dayId, (err, deletedLeagueDay) => {
             if(err){
                 next(err)
