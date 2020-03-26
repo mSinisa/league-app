@@ -6,7 +6,6 @@ let daySchema = new Schema({
         type: String,
         unique: true
     },
-    description: String,
     divisions: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Division'

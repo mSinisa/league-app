@@ -1,7 +1,3 @@
-import {
-    mapGetters
-} from 'vuex'
+import { mapGetters } from 'vuex'
 
-export const authComputed = {
-    ...mapGetters(['loggedIn'])
-}
+export const authComputed = { ...mapGetters(['loggedIn']) }

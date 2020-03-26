@@ -1,70 +1,56 @@
 <template>
-  <div class="hello">
-    <form>
-      <div class="form-group">
-        <label for="name">Play Day</label>
-        <input type="text" class="form-control" name="name" v-model="name" />
-      </div>
-      <div class="form-group">
-        <label for="description">Description</label>
-        <input
-          type="text"
-          class="form-control"
-          name="description"
-          v-model="description"
-        />
-      </div>
-      <div v-if="message">
-        <p>{{ message }}</p>
-      </div>
-      <div class="form-group">
-        <button class="btn btn-primary btn-large" @click.prevent="create">
-          Create
-        </button>
-      </div>
-    </form>
-  </div>
+    <div class="hello">
+        <h5 class="text-center">Create New League</h5>
+        <form class="mt-4">
+            <div class="form-group">
+                <label for="name">League name: </label>
+                <input type="text" class="form-control" name="name" v-model="name" />
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-outline-success btn-large" @click.prevent="create">
+                    Create
+                </button>
+            </div>
+
+            <div v-if="message">
+                <p class="text-danger">{{ message }}</p>
+            </div>
+        </form>
+    </div>
 </template>
 
 <script>
-import services from "../../services/event-service";
-
 export default {
-  // name: "NewDay",
-  data() {
-    return {
-      name: null,
-      description: null,
-      message: null
-    };
-  },
-  methods: {
-    create() {
-      services
-        .createDay({ name: this.name, description: this.description })
-        .then(res => {
-          if (res.data.status == 201) {
-            this.$router.push({
-              name: "AdminHome"
-            });
-          } else {
-            this.message = res.data.message;
-            this.$router.push({
-              name: "Login"
-            });
-          }
-          console.log(res.data);
-        })
-        .catch(err => {
-          console.log(err.message);
-        });
-    }
-  },
-  updated() {}
+    data() {
+        return {
+            name: null,
+            message: null
+        }
+    },
+    methods: {
+        showAndHideErrorMessage(){
+            this.message = 'Please add a name'
+            setTimeout( () => {
+                this.message = null
+            }, 4000)
+        },
+        create() {
+            if(this.name){
+                this.$store.dispatch('createLeagueDay', {name: this.name} )
+            } else {
+                this.showAndHideErrorMessage()
+            }
+        }
+  }
 };
 </script>
 
 <style scoped>
+form{
+    width: 80%;
+    margin: 0 auto;
+}
 .hello {
   margin: 10vh 0;
 }

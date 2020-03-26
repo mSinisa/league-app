@@ -9,9 +9,19 @@ const apiClient = axios.create({
 });
 
 export default {
-  //ADMIN COMMANDS
-  createDay(data) {
-    return apiClient.post("/admin/days", data);
+  //ADMIN
+  getDays() {
+    return apiClient.get("/admin/days");
+  },
+  getAllDivisions(){
+    return apiClient.get("admin/days/divisions")
+  },
+  //DAY
+  createLeagueDay(data) {
+    return apiClient.post('/admin/days', data);
+  },
+  deleteLeagueDay(dayId) {
+    return apiClient.delete(`/admin/days/${dayId}`)
   },
 
   createDivision(data, dayId) {
@@ -22,9 +32,6 @@ export default {
     return apiClient.post(`/admin/days/${dayId}/divisions/${divisionId}/teams`, data)
   },
   //APP INFO
-  getDays() {
-    return apiClient.get("/admin/days");
-  },
   getDivisions(dayId) {
     return apiClient.get(`/admin/days/${dayId}/divisions`)
   },

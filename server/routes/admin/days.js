@@ -1,38 +1,66 @@
 const express = require('express')
 const router = express.Router()
 const Day = require('../../models/Day')
+const Division = require('../../models/Division')
 
-router.get('/', (req, res) => {
-    Day.find({}, (err, days) => {
+router.get('/', (req, res, next) => {
+    Day.find({}).populate('divisions').exec((err, foundDays) => {
         if (err) {
-            console.log(err)
+            next(err)
         } else {
-            res.json({
-                days: days
-            }).status(200)
+            res.status(200).json({
+                days: foundDays
+            })
         }
     })
 })
 
-router.post('/', (req, res) => {
-    console.log(req.body)
-    let newDay = {
-        name: req.body.name,
-        description: req.body.description
-    }
-
-    Day.create(newDay, (err, createdDay) => {
+router.get('/divisions', (req, res, next) => {
+    Division.find({}).populate('teams').exec((err, allDivisions) => {
         if (err) {
-            res.json({
-                message: `there was an error ${err}`
-            })
+            next(err)
         } else {
-            res.json({
-                status: 201,
-                message: `Successfuly created new league day ${createdDay}`
+            res.status(200).json({
+                allDivisions: allDivisions
             })
         }
     })
+})
+
+router.post('/', (req, res, next) => {
+        let newLeagueDay = { name: req.body.name }
+        Day.create(newLeagueDay, (err, createdDay) => {
+            if (err) {
+                next(err)
+            } else {
+                res.status(201).json({ 
+                    newLeagueDay: createdDay,
+                    notification: {
+                        type: 'success', 
+                        message:`Successfuly created new league day ${createdDay.name}`
+                    }
+                })
+            }
+        })
+})
+
+router.delete('/:dayId', (req, res, next) => {
+    if(req.params.dayId){
+        Day.findByIdAndDelete(req.params.dayId, (err, deletedLeagueDay) => {
+            if(err){
+                next(err)
+            } else {
+                res.status(201).json({
+                    deletedDay: deletedLeagueDay,
+                    notification: {
+                        type: 'success',
+                        message: `Successfully deleted league day ${deletedLeagueDay.name}`
+                    }
+                })
+            }
+        })
+    }
+    
 })
 
 module.exports = router
