@@ -6,7 +6,6 @@ const Division = require("../../models/Division")
 //NEW
 router.post("/", (req, res, next) => {
     if (req.params.dayId) {
-        console.log(req.body)
         Day.findById(req.params.dayId).populate('divisions').exec((err, foundDay) => {
             if (err) {
                 next(err)
@@ -32,29 +31,6 @@ router.post("/", (req, res, next) => {
         })
     } 
 });
-
-//SHOW
-router.get('/:divisionId', (req, res) => {
-    Division.findById(req.params.divisionId, (err, foundDivision) => {
-        if (err) {
-            console.log(err)
-        } else {
-            console.log(foundDivision)
-            res.json({
-                division: foundDivision
-            })
-        }
-    })
-})
-
-//EDIT
-router.put('/:divisionId/edit', (req, res) => {
-    if (req.params.divisionId && req.params.dayId) {
-
-    } else {
-        res.sendStatus(400)
-    }
-})
 
 //DELETE
 router.delete('/:divisionId', (req, res, next) => {

@@ -12,6 +12,9 @@ export default new Vuex.Store({
         user: null,
         days: null,
         allDivisions: null,
+
+
+
         // divisions: null,
         // teams: null,
         //Team show
@@ -77,22 +80,18 @@ export default new Vuex.Store({
     },
     actions: {
         register({ commit }, credentials) {
-            return axios
-                .post("//localhost:8082/register", credentials)
+            return axios.post("//localhost:8082/register", credentials)
                 .then(({ data }) => {
                     commit("SET_USER_DATA", data);
                 });
         },
         login({ commit }, credentials) {
-            return axios
-                .post("//localhost:8082/login", credentials)
+            return axios.post("//localhost:8082/login", credentials)
                 .then(({ data }) => {
                     commit("SET_USER_DATA", data);
                 });
         },
-        logout({
-            commit
-        }) {
+        logout({ commit }) {
             commit("CLEAR_USER_DATA");
         },
         // ====================================   ADMIN ========================================
@@ -134,44 +133,6 @@ export default new Vuex.Store({
             })
             .catch(err => console.log(err))
         },
-        // fetchDivisions({
-        //     commit
-        // }, dayId) {
-        //     services.getDivisions(dayId)
-        //         .then(res => {
-        //             let responseObj = JSON.parse(JSON.stringify(res.data.divisions))
-        //             // console.log(responseObj.divisions + 'divisions response')
-        //             commit('SET_DIVISIONS', responseObj)
-        //         })
-        //         .catch(err => {
-        //             console.log(err)
-        //         })
-        // },
-        // fetchDivision({
-        //     commit
-        // }, {
-        //     dayId,
-        //     divisionId
-        // }) {
-        //     services.getDivision(dayId, divisionId)
-        //         .then(res => {
-        //             console.log(res.data)
-        //             commit('SET_DIVISION', res.data.division)
-        //         })
-        //         .catch(err => {
-        //             console.log(err)
-        //         })
-        // },
-
-
-        editDivision({
-            commit,
-            dispatch
-        }, {
-            dayId,
-            divisionId,
-        }) {},
-
         deleteDivision({ commit, dispatch }, { dayId, divisionId }) {
             services.deleteDivision(dayId, divisionId)
                 .then(res => {
@@ -189,42 +150,36 @@ export default new Vuex.Store({
                     })
                 })
         },
-
         // ---------------------------- TEAMS -----------------------------------
-        fetchTeams({
-            commit
-        }, {
-            dayId,
-            divisionId
-        }) {
-            // console.log("ids from fetchTeams: " + dayId, divisionId)
-            services.getTeams(dayId, divisionId)
-                .then(res => {
-                    let responseObj = JSON.parse(JSON.stringify(res.data.teams))
-                    commit('SET_TEAMS', responseObj)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-        },
-        fetchTeam({
-            commit
-        }, {
-            dayId,
-            divisionId,
-            teamId
-        }) {
-            console.log('ids from fetchTeam: ' + teamId)
-            services.getTeam(dayId, divisionId, teamId)
-                .then(res => {
-                    // let responseObj = JSON.parse(JSON.stringify(res.data))
-                    let responseObj = JSON.parse(JSON.stringify(res.data.team))
-                    commit('SET_TEAM', responseObj)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-        },
+
+        // fetchTeams({
+        //     commit
+        // }, {
+        //     dayId,
+        //     divisionId
+        // }) {
+        //     // console.log("ids from fetchTeams: " + dayId, divisionId)
+        //     services.getTeams(dayId, divisionId)
+        //         .then(res => {
+        //             let responseObj = JSON.parse(JSON.stringify(res.data.teams))
+        //             commit('SET_TEAMS', responseObj)
+        //         })
+        //         .catch(err => {
+        //             console.log(err)
+        //         })
+        // },
+        // fetchTeam({ commit }, { dayId, divisionId, teamId }) {
+        //     console.log('ids from fetchTeam: ' + teamId)
+        //     services.getTeam(dayId, divisionId, teamId)
+        //         .then(res => {
+        //             // let responseObj = JSON.parse(JSON.stringify(res.data))
+        //             let responseObj = JSON.parse(JSON.stringify(res.data.team))
+        //             commit('SET_TEAM', responseObj)
+        //         })
+        //         .catch(err => {
+        //             console.log(err)
+        //         })
+        // },
         fetchAllPlayers({
             commit
         }) {

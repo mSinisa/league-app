@@ -9,7 +9,7 @@
 				<div class="d-flex flex-row flex-wrap" v-if="days">
 					<button v-for="(day, index) in days" :key="day._id" class="btn btn-outline-dark mx-2"
 						@click.prevent="saveIdOfSelectedDay(day._id); setDayDivisions(day._id); 
-						showDivisions(); hideTeams(); showDeleteDay()">
+						showDivisions(); hideTeams(); showDeleteDay(); hideDeleteAndEditDivision()">
 						{{ day.name }}
 					</button>
 				</div>
@@ -79,10 +79,10 @@
 						Delete Division
 					</button>
 
-					<router-link :to="{ name: 'EditDivision', params: { dayId: selectedDayId, divisionId: selectedDivisionId }}" 
+					<!-- <router-link :to="{ name: 'EditDivision', params: { dayId: selectedDayId, divisionId: selectedDivisionId }}" 
 						class="btn btn-outline-warning mt-2 mb-0 mx-0" :dayId="selectedDayId" :divisionId="selectedDivisionId">
 						Edit Division
-					</router-link>
+					</router-link> -->
 				</div>
 			</div>
 		</div>
@@ -105,7 +105,10 @@
 
 			<div class="card-footer">
 				<router-link :to="{ name: 'NewTeam', params: { dayId: selectedDayId, divisionId: selectedDivisionId }}" 
-					class="btn btn-outline-success">
+					class="btn btn-outline-success"
+					:dayId="selectedDayId"
+					:divisionId="selectedDivisionId"
+					>
 					Add new team
 				</router-link>
 			</div>

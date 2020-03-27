@@ -7,7 +7,7 @@
             </div>
 
             <div class="form-group">
-                <button class="btn btn-primary btn-large" @click.prevent="create">
+                <button class="btn btn-outline-success btn-large" @click.prevent="create">
                     Create
                 </button>
             </div>

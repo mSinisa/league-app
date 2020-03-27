@@ -2,10 +2,6 @@ import axios from "axios";
 
 const apiClient = axios.create({
   baseURL: "http://localhost:8082"
-  // headers: {
-  //     Accept: 'application/json',
-  //     'Content-Type': 'application/json'
-  // }
 });
 
 export default {
@@ -23,13 +19,20 @@ export default {
   deleteLeagueDay(dayId) {
     return apiClient.delete(`/admin/days/${dayId}`)
   },
+  //DIVISION
   createDivision(name, dayId) {
     return apiClient.post(`/admin/days/${dayId}/divisions`, name)
   },
-
+  deleteDivision(dayId, divisionId) {
+    return apiClient.delete(`/admin/days/${dayId}/divisions/${divisionId}`)
+  },
+  //TEAM
   createTeam(data, dayId, divisionId) {
     return apiClient.post(`/admin/days/${dayId}/divisions/${divisionId}/teams`, data)
   },
+
+
+  
   //APP INFO
   getDivisions(dayId) {
     return apiClient.get(`/admin/days/${dayId}/divisions`)
@@ -42,9 +45,6 @@ export default {
   },
   getDivision(dayId, divisionId) {
     return apiClient.get(`/admin/days/${dayId}/divisions/${divisionId}`)
-  },
-  deleteDivision(dayId, divisionId) {
-    return apiClient.delete(`/admin/days/${dayId}/divisions/${divisionId}`)
   },
   getAllPlayers() {
     return apiClient.get('/admin')
