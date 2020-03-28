@@ -67,7 +67,8 @@ const routes = [{
     {
         path: '/admin/days/:dayId/divisions/:divisionId/teams/:teamId',
         name: 'ShowTeam',
-        component: ShowTeam
+        component: ShowTeam,
+        props: true
     }
 ]
 

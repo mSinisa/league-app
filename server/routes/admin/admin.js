@@ -11,16 +11,17 @@ const User = require('../../models/User')
 //         message: 'hello from admin page'
 //     })
 // })
-router.get('/', (req, res) => {
-    User.find({}, (err, foundUsers) => {
-        if (err) {
-            console.log(err)
-        } else {
-            res.json({
-                allPlayers: foundUsers
-            })
-        }
-    })
-})
+
+// router.get('/', (req, res) => {
+//     User.find({}, (err, foundUsers) => {
+//         if (err) {
+//             console.log(err)
+//         } else {
+//             res.json({
+//                 allPlayers: foundUsers
+//             })
+//         }
+//     })
+// })
 
 module.exports = router

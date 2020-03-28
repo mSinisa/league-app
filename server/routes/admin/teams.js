@@ -1,29 +1,21 @@
-const express = require("express")
+const express = require('express')
 const router = express.Router({ mergeParams: true })
-const Division = require("../../models/Division")
-const Team = require("../../models/Team")
-const User = require("../../models/User")
+const Division = require('../../models/Division')
+const Team = require('../../models/Team')
 
-//SHOW this one?
-// router.get("/", (req, res) => {
-//     // var myId = JSON.parse(req.params.divisionId);
-//     Division.findById(req.params.divisionId)
-//         .populate("teams")
-//         .exec((err, foundDivision) => {
-//             // Division.findById({
-//             //     _id: ObjectID(req.params.divisionId)
-//             // }).populate('teams').exec((err, foundDivision) => {
-//             // console.log(foundDivision);
-//             if (err) {
-//                 console.log(err);
-//             } else {
-//                 res.json({
-//                     teams: foundDivision.teams
-//                 });
-//             }
-//         });
-// });
-
+//SHOW 
+//SHOW TEAM
+router.get("/:teamId", (req, res, next) => {
+    if(req.params.teamId && req.params.divisionId && req.params.dayId) {
+        Team.findById(req.params.teamId).populate("players").exec((err, foundTeam) => {
+            if (!err) {
+                res.json({ team: foundTeam })
+            } else {
+                next(err)
+            }
+        })
+    }
+})
 //NEW TEAM
 router.post("/", (req, res, next) => {
     Division.findById(req.params.divisionId, (err, foundDivision) => {
@@ -51,21 +43,6 @@ router.post("/", (req, res, next) => {
             });
         }
     });
-});
-
-//SHOW TEAM
-router.get("/:teamId", (req, res, next) => {
-    Team.findById(req.params.teamId)
-        .populate("players")
-        .exec((err, foundTeam) => {
-            if (err) {
-                console.log(err);
-            } else {
-                res.json({
-                    team: foundTeam
-                });
-            }
-        });
 });
 
 module.exports = router;

@@ -68,7 +68,6 @@
 
 			<div class="card-footer">
 				<router-link :to="{ name: 'NewDivision', params: { dayId: selectedDayId } }" 
-					:dayId="selectedDayId"
 					class="btn btn-outline-success">
 					Add new division
 				</router-link>
@@ -78,11 +77,6 @@
 						class="btn btn-outline-danger m-0">
 						Delete Division
 					</button>
-
-					<!-- <router-link :to="{ name: 'EditDivision', params: { dayId: selectedDayId, divisionId: selectedDivisionId }}" 
-						class="btn btn-outline-warning mt-2 mb-0 mx-0" :dayId="selectedDayId" :divisionId="selectedDivisionId">
-						Edit Division
-					</router-link> -->
 				</div>
 			</div>
 		</div>
@@ -105,10 +99,7 @@
 
 			<div class="card-footer">
 				<router-link :to="{ name: 'NewTeam', params: { dayId: selectedDayId, divisionId: selectedDivisionId }}" 
-					class="btn btn-outline-success"
-					:dayId="selectedDayId"
-					:divisionId="selectedDivisionId"
-					>
+					class="btn btn-outline-success">
 					Add new team
 				</router-link>
 			</div>
@@ -132,7 +123,7 @@ export default {
 			displayDivisions: false,
 
 			displayTeams: false,
-			displayDeleteAndEditDivision: false
+			displayDeleteAndEditDivision: false,
   		};
     },
     methods: {
@@ -181,33 +172,31 @@ export default {
 			this.$store.dispatch('deleteLeagueDay', this.selectedDayId)
 		},	  	  
       	deleteDivision() {
-        	this.$store.dispatch("deleteDivision", {
+        	this.$store.dispatch('deleteDivision', {
           		dayId: this.selectedDayId,
           		divisionId: this.selectedDivisionId
 			})	
-      	}
+		}
     },
     created() {
-      	this.$store.dispatch("getDays")
-		this.$store.dispatch("getAllDivisions")
+      	this.$store.dispatch('getDays')
+		this.$store.dispatch('getAllDivisions')
     },
     computed: {
 		...mapState(['days', 'allDivisions']),
 		...mapGetters(['getDayById', 'getDivisionById'])	  	
     }
-  };
+  }
 </script>
 
 <style scoped>
   .hello {
     margin: 9vh 0;
   }
-
   .btn {
     width: 100%;
     margin-bottom: 15px;
   }
-
   .card {
     margin: 0 auto;
   }
