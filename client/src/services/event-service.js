@@ -33,7 +33,9 @@ export default {
     getTeam({dayId, divisionId, teamId}) {
         return apiClient.get(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}`)
     },
-
+    deleteTeam({dayId, divisionId, teamId}) {
+        return apiClient.delete(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}`)
+    },
 
     //APP INFO
     getDivisions(dayId) {

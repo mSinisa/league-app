@@ -28,9 +28,10 @@
                 <button class="btn btn-outline-primary btnWidth60">Transfer team</button>
             </div>
             <div class="d-flex justify-content-center mt-4">
-                <button class="btn btn-outline-danger btnWidth60">DELETE team</button>
+                <button class="btn btn-outline-danger btnWidth60" @click.prevent="deleteTeam()">DELETE team</button>
             </div>
         </div>
+
 
         <!-- <div class="d-flex flex-row justify-content-around" v-if="showPlayerActions">
             <i @click="openPlayerInputAdd" class="fas fa-plus-circle"><span>Add Player</span></i>
@@ -79,8 +80,8 @@
 
 <script>
 // import { mapState, mapGetters } from "vuex";
-import { mapGetters } from "vuex";
-import services from "../../services/event-service";
+import { mapGetters } from "vuex"
+import services from "../../services/event-service"
   
 export default {
     props: [ 'dayId', 'divisionId', 'teamId'],
@@ -104,6 +105,14 @@ export default {
             services.getTeam({ dayId:this.dayId, divisionId: this.divisionId, teamId: this.teamId })
                 .then(res => {
                     this.team = res.data.team
+                })
+                .catch(err => console.log(err))
+        },
+        deleteTeam(){
+            services.deleteTeam({ dayId:this.dayId, divisionId: this.divisionId, teamId: this.teamId })
+                .then(res => {
+                    this.$router.push({ name: 'AdminHome' })
+                    this.$store.dispatch('notification/add', res.data.notification, {root:true})
                 })
                 .catch(err => console.log(err))
         }
