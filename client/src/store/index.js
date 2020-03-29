@@ -12,6 +12,7 @@ export default new Vuex.Store({
         user: null,
         days: null,
         allDivisions: null,
+        allPlayers: null
 
 
 
@@ -53,7 +54,9 @@ export default new Vuex.Store({
         DELETE_DIVISION_FROM_DIVISIONS(state, deletedDivision) {
             state.allDivisions = state.allDivisions.filter(division => division._id !== deletedDivision._id)
         },
-
+        SET_ALL_PLAYERS(state, playersData) {
+            state.allPlayers = playersData
+        },
 
 
         SET_DIVISIONS(state, divisionsData) {
@@ -67,9 +70,6 @@ export default new Vuex.Store({
         },
         SET_DIVISION(state, divisionData) {
             state.division = divisionData
-        },
-        SET_ALL_PLAYERS(state, playersData) {
-            state.allPlayers = playersData
         },
         SET_BACKEND_ERR_MESSAGE(state, errMessage) {
             state.backendErrorMessage = errMessage
@@ -180,14 +180,13 @@ export default new Vuex.Store({
         //             console.log(err)
         //         })
         // },
-        fetchAllPlayers({
-            commit
-        }) {
+        // -------------------------------    PLAYERS    ------------------------------------
+        getAllPlayers({ commit }) {
             services.getAllPlayers()
                 .then(res => {
-                    let responseObj = JSON.parse(JSON.stringify(res.data))
-                    commit('SET_ALL_PLAYERS', responseObj)
+                    commit('SET_ALL_PLAYERS', res.data.allPlayers)
                 })
+                .catch(err => console.log(err))
         },
         addTeamPlayer({
             commit

@@ -14,7 +14,7 @@ let userSchema = new Schema({
         required: true
     },
     phoneNumber: String,
-    teams: [],
+    // teams: [],
     firstName: String,
     lastName: String,
     role: String,

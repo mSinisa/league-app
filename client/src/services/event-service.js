@@ -36,6 +36,17 @@ export default {
     deleteTeam({dayId, divisionId, teamId}) {
         return apiClient.delete(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}`)
     },
+    //PLAYERS
+    getAllPlayers() {
+        return apiClient.get('/admin/allPlayers')
+    },
+    addPlayer({dayId, divisionId, teamId, playerId}) {
+        return apiClient.post(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}/teamPlayers`, {playerId})
+    },
+    removePlayer({dayId, divisionId, teamId, playerId}) {
+        return apiClient.delete(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}/teamPlayers/${playerId}`)
+    },
+
 
     //APP INFO
     getDivisions(dayId) {
@@ -46,15 +57,5 @@ export default {
     },
     getDivision(dayId, divisionId) {
         return apiClient.get(`/admin/days/${dayId}/divisions/${divisionId}`)
-    },
-    getAllPlayers() {
-        return apiClient.get('/admin')
-    },
-    //add player to team
-    addPlayer(dayId, divisionId, teamId, playerId) {
-        return apiClient.post(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}/teamPlayers`, playerId)
-    },
-    removeTeamPlayer(dayId, divisionId, teamId, playerId) {
-        return apiClient.delete(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}/teamPlayers/${playerId}`)
     }
 };

@@ -48,8 +48,8 @@ export default {
             if(this.name){
                 services.createTeam({name: this.name}, this.dayId, this.divisionId)
                     .then(res => {
-                        this.$router.push({ name: "AdminHome" });
-                        this.$store.dispatch("notification/add", res.data.notification , { root: true });
+                        this.$router.push({ name: "AdminHome" })
+                        this.$store.dispatch("notification/add", res.data.notification , { root: true })
                     })
                     .catch(err => console.log(err))
             } else {
