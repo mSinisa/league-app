@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router({ mergeParams: true })
 const Day = require("../../models/Day")
 const Division = require("../../models/Division")
+const Team = require('../../models/Team')
 
 //NEW
 router.post("/", (req, res, next) => {
@@ -57,6 +58,33 @@ router.delete('/:divisionId', (req, res, next) => {
                         })
                     }
                 })
+            }
+        })
+    }
+})
+
+//TRANSFER team between divisions
+router.put('/', (req, res, next) => {
+    if(req.params.dayId && req.body.currentDivisionId && req.body.teamId && req.body.divisionToTransferToId) {
+        Division.findById(req.body.currentDivisionId, (err, currentTeamDivision) => {
+            if(err) {
+                next(err)
+            } else {
+                currentTeamDivision.teams = currentTeamDivision.teams.filter(team => JSON.stringify(team) !== JSON.stringify(req.body.teamId))
+                currentTeamDivision.save()
+            }
+        })
+
+        Division.findById(req.body.divisionToTransferToId, (err, divisionToTransferTo) => {
+            if(err){
+                next(err)
+            } else {
+                divisionToTransferTo.teams.push(req.body.teamId)
+                divisionToTransferTo.save()
+                res.json({ notification: {
+                    message: `Successfully transfered team`,
+                    type: 'success'
+                } })
             }
         })
     }

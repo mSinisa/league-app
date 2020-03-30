@@ -17,31 +17,33 @@ router.get("/:teamId", (req, res, next) => {
 })
 //NEW Team
 router.post("/", (req, res, next) => {
-    Division.findById(req.params.divisionId, (err, foundDivision) => {
-        if (err) {
-            next(err)
-        } else {
-            let newTeam = {
-                name: req.body.name,
-                // description: req.body.description
-            };
-
-            Team.create(newTeam, (err, createdTeam) => {
-                if (err) {
-                    next(err)
-                } else {
-                    foundDivision.teams.push(createdTeam)
-                    foundDivision.save()
-                    res.json({
-                        notification: {
-                            type: 'success',
-                            message: `Successfully created new team ${createdTeam.name}`
-                        }
-                    })
-                }
-            })
-        }
-    })
+    if(req.params.divisionId && req.params.dayId){
+        Division.findById(req.params.divisionId, (err, foundDivision) => {
+            if (err) {
+                next(err)
+            } else {
+                let newTeam = {
+                    name: req.body.name,
+                    // description: req.body.description
+                };
+    
+                Team.create(newTeam, (err, createdTeam) => {
+                    if (err) {
+                        next(err)
+                    } else {
+                        foundDivision.teams.push(createdTeam)
+                        foundDivision.save()
+                        res.json({
+                            notification: {
+                                type: 'success',
+                                message: `Successfully created new team ${createdTeam.name}`
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    }
 })
 //Delete Team
 router.delete('/:teamId', (req, res, next) => {

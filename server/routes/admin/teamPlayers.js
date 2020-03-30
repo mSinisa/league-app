@@ -45,8 +45,6 @@ router.post("/", (req, res, next) => {
             }
         });
     }
-
-
 });
 
 router.delete('/:playerId', (req, res, next) => {
