@@ -4,9 +4,9 @@ const Division = require('../../models/Division')
 const Team = require('../../models/Team')
 
 //SHOW Team
-router.get("/:teamId", (req, res, next) => {
+router.get('/:teamId', (req, res, next) => {
     if(req.params.teamId && req.params.divisionId && req.params.dayId) {
-        Team.findById(req.params.teamId).populate("players").exec((err, foundTeam) => {
+        Team.findById(req.params.teamId).populate('players').exec((err, foundTeam) => {
             if (!err) {
                 res.json({ team: foundTeam })
             } else {
@@ -16,8 +16,8 @@ router.get("/:teamId", (req, res, next) => {
     }
 })
 //NEW Team
-router.post("/", (req, res, next) => {
-    if(req.params.divisionId && req.params.dayId){
+router.post('/', (req, res, next) => {
+    if(req.params.divisionId && req.params.dayId && req.body.name){
         Division.findById(req.params.divisionId, (err, foundDivision) => {
             if (err) {
                 next(err)

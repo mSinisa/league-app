@@ -1,11 +1,11 @@
-const express = require("express")
+const express = require('express')
 const router = express.Router({ mergeParams: true })
-const Day = require("../../models/Day")
+const Day = require('../../models/Day')
 const Division = require("../../models/Division")
 const Team = require('../../models/Team')
 
 //NEW
-router.post("/", (req, res, next) => {
+router.post('/', (req, res, next) => {
     if (req.params.dayId) {
         Day.findById(req.params.dayId).populate('divisions').exec((err, foundDay) => {
             if (err) {
@@ -31,7 +31,7 @@ router.post("/", (req, res, next) => {
             }
         })
     } 
-});
+})
 
 //DELETE
 router.delete('/:divisionId', (req, res, next) => {
@@ -90,4 +90,4 @@ router.put('/', (req, res, next) => {
     }
 })
 
-module.exports = router;
+module.exports = router

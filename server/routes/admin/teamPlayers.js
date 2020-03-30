@@ -1,11 +1,11 @@
-const express = require("express");
+const express = require('express')
 const router = express.Router({ mergeParams: true })
-const Team = require("../../models/Team");
-const User = require("../../models/User");
+const Team = require('../../models/Team')
+const User = require('../../models/User')
 
-router.post("/", (req, res, next) => {
+router.post('/', (req, res, next) => {
     if(req.params.dayId && req.params.divisionId && req.params.teamId && req.body.playerId) {
-        Team.findById(req.params.teamId).populate("players").exec((err, foundTeam) => {
+        Team.findById(req.params.teamId).populate('players').exec((err, foundTeam) => {
             if (err) {
                 next(err)
             } else {
@@ -24,7 +24,7 @@ router.post("/", (req, res, next) => {
                         if (foundTeamHasfoundPlayer) {
                             res.status(409).json({
                                     notification: { 
-                                        message: "This player is already on the team", 
+                                        message: 'This player is already on the team', 
                                         type: 'error'
                                     }, 
                                 })
@@ -34,7 +34,7 @@ router.post("/", (req, res, next) => {
     
                             res.json({ 
                                 notification: { 
-                                    message: "Successfully added player to the team", 
+                                    message: 'Successfully added player to the team', 
                                     type: 'success'
                                 },
                                 updatedTeam: foundTeam
@@ -43,9 +43,9 @@ router.post("/", (req, res, next) => {
                     }
                 })
             }
-        });
+        })
     }
-});
+})
 
 router.delete('/:playerId', (req, res, next) => {
     if(req.params.dayId && req.params.divisionId && req.params.teamId && req.params.playerId) {
@@ -58,7 +58,7 @@ router.delete('/:playerId', (req, res, next) => {
                 res.json({
                     updatedTeam: foundTeam,
                     notification: { 
-                        message: "Successfully removed player from the team", 
+                        message: 'Successfully removed player from the team', 
                         type: 'success'
                     }
                 })
@@ -67,4 +67,4 @@ router.delete('/:playerId', (req, res, next) => {
     }
 })
 
-module.exports = router;
+module.exports = router

@@ -3,7 +3,7 @@ const router = express.Router()
 const User = require('../../models/User')
 
 router.get('/', (req, res) => {
-    res.json({message: 'Admin Page'})
+    res.json({ message: 'Admin Page' })
 })
 
 router.get('/allPlayers', (req, res, next) => {
@@ -11,7 +11,7 @@ router.get('/allPlayers', (req, res, next) => {
         if(err){
             next(err)
         } else {
-            res.json({allPlayers: allPlayers})
+            res.json({ allPlayers: allPlayers })
         }
     })
 })

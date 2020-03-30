@@ -11,14 +11,16 @@
 export default {};
 </script>
 <style>
-.-text-primary {
-  color: #39b982;
+.-text-success {
+  background-color: #39b982;
+  color: white;
 }
 .-text-base {
   color: #000;
 }
 .-text-error {
-  color: tomato;
+  background-color: tomato;
+  color: white;
 }
 .-text-gray {
   color: rgba(0, 0, 0, 0.5);
