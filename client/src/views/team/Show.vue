@@ -22,7 +22,7 @@
         <div class="actions mt-5" v-if="teamActions">
             <div class="addAndRemove d-flex justify-content-around">
                 <button class="btn btn-outline-success btnWidth40" 
-                    @click.prevent="openAddPlayerAction(); hideTeamActions()">
+                    @click.prevent="getAllPlayers(); openAddPlayerAction(); hideTeamActions()">
                     Ad player
                 </button>
                 <button class="btn btn-outline-danger btnWidth40"
@@ -168,8 +168,10 @@ export default {
                 })
                 .catch(err => console.log(err))
         },
-        openAddPlayerAction(){
+        getAllPlayers(){
             this.$store.dispatch('getAllPlayers')
+        },
+        openAddPlayerAction(){
             this.displayAddPlayerBox = true
         },
         hideAddPlayerAction(){

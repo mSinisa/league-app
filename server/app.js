@@ -12,7 +12,7 @@ const teamPlayerRoutes = require('./routes/admin/teamPlayers')
 
 const app = express()
 
-mongoose.connect('mongodb+srv://sm:sina123@cluster0-pxdmd.mongodb.net/leagueNew?retryWrites=true&w=majority', 
+mongoose.connect('mongodb+srv://username:pass@cluster0-pxdmd.mongodb.net/leagueNew?retryWrites=true&w=majority', 
     { useNewUrlParser: true, useUnifiedTopology: true })
         .then(console.log("db connected"))
         .catch(err => {
