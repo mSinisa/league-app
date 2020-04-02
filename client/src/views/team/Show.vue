@@ -1,5 +1,6 @@
 <template>
     <div class="hello">
+
         <div class="text-center">
             <h4 class="m-0" v-if="team">{{ team.name }}</h4>
             <span class="font-weight-light">team</span>
@@ -20,19 +21,19 @@
         </div>
 
         <div class="actions mt-5" v-if="teamActions">
-            <div class="addAndRemove d-flex justify-content-around">
+            <div class="d-flex justify-content-around">
                 <button class="btn btn-outline-success btnWidth40" 
-                    @click.prevent="getAllPlayers(); openAddPlayerAction(); hideTeamActions()">
+                    @click.prevent="getAllPlayers(); showElements('displayAddPlayerBox'); hideElements('teamActions')">
                     Ad player
                 </button>
                 <button class="btn btn-outline-danger btnWidth40"
-                    @click.prevent="openRemovePlayerAction(); hideTeamActions()">
+                    @click.prevent="showElements('displayRemovePlayerBox'); hideElements('teamActions')">
                     Remove player
                 </button>
             </div>
             <div class="d-flex justify-content-center mt-4">
                 <button class="btn btn-outline-primary btnWidth60"
-                    @click.prevent="setDivisionsToTransferTo(); showTransferTeamAction(); hideTeamActions()">
+                    @click.prevent="setDivisionsToTransferTo(); showElements('displayTransferTeamBox'); hideElements('teamActions')">
                     Transfer team
                 </button>
             </div>
@@ -47,7 +48,7 @@
                 <div class="card-body">
                     <div class="d-flex flex-row justify-content-between align-items-center">
                         <h5 class="card-title m-0">Add Player</h5>
-                        <i class="fas fa-times" @click.prevent="hideAddPlayerAction(); showTeamActions()"></i>
+                        <i class="fas fa-times" @click.prevent="hideElements('displayAddPlayerBox'); showElements('teamActions')"></i>
                     </div>
                     <hr>
 
@@ -71,7 +72,7 @@
                 <div class="card-body">
                     <div class="d-flex flex-row justify-content-between align-items-center">
                         <h5 class="card-title m-0">Remove Player</h5>
-                        <i class="fas fa-times" @click.prevent="hideRemovePlayerAction(); showTeamActions()"></i>
+                        <i class="fas fa-times" @click.prevent="hideElements('displayRemovePlayerBox'); showElements('teamActions')"></i>
                     </div>
                     <hr>
 
@@ -95,7 +96,7 @@
                 <div class="card-body">
                     <div class="d-flex flex-row justify-content-between align-items-center">
                         <h5 class="card-title m-0">Transfer team</h5>
-                        <i class="fas fa-times" @click.prevent="hideTransferTeamAction(); showTeamActions()"></i>
+                        <i class="fas fa-times" @click.prevent="hideElements('displayTransferTeamBox'); showElements('teamActions')"></i>
                     </div>
                     <hr>
 
@@ -146,12 +147,27 @@ export default {
         }
     },
     methods: {
+        showElements(...propertyNames){
+            propertyNames.forEach(name => this[name] = true)
+        },
+        hideElements(...propertyNames){
+            propertyNames.forEach(name => this[name] = false)
+        },
+        showAndHideErrorMessage(){
+            this.message = 'Please make a selection'
+            setTimeout( () => {
+                this.message = null
+            }, 4000)
+        },
         setDivisionsToTransferTo(){
             let leagueDay = this.getDayById(this.dayId)
             this.divisionsToTransferTo = leagueDay.divisions.filter(division => division._id !== this.divisionId)
         },
         setTeamDivision(){
             this.teamDivision = this.getDivisionById(this.divisionId)
+        },
+        getAllPlayers(){
+            this.$store.dispatch('getAllPlayers')
         },
         fetchTeam(){
             services.getTeam({ dayId:this.dayId, divisionId: this.divisionId, teamId: this.teamId })
@@ -160,99 +176,68 @@ export default {
                 })
                 .catch(err => console.log(err))
         },
-        deleteTeam(){
-            services.deleteTeam({ dayId:this.dayId, divisionId: this.divisionId, teamId: this.teamId })
-                .then(res => {
-                    this.$router.push({ name: 'AdminHome' })
-                    this.$store.dispatch('notification/add', res.data.notification, {root:true})
-                })
-                .catch(err => console.log(err))
-        },
-        getAllPlayers(){
-            this.$store.dispatch('getAllPlayers')
-        },
-        openAddPlayerAction(){
-            this.displayAddPlayerBox = true
-        },
-        hideAddPlayerAction(){
-            this.displayAddPlayerBox = false
+        showAndHideNotification(){
+            this.$store.dispatch('notification/add', res.data.notification)
         },
         addPlayer(){
             if(this.playerToAdd) {
-                console.log(this.playerToAdd)
                 services.addPlayer({ dayId: this.dayId, divisionId: this.divisionId, teamId: this.teamId, playerId: this.playerToAdd })
                     .then(res => {
                         this.team = res.data.updatedTeam,
-                        this.$store.dispatch("notification/add", res.data.notification , { root: true })
-                        this.hideAddPlayerAction()
-                        this.showTeamActions()
+                        this.showAndHideNotification()
+                        this.hideElements('displayAddPlayerBox')
+                        this.showElements('teamActions')
                     })
                     .catch(err => {
                         if(err.response.status == 409) {
-                            this.$store.dispatch("notification/add", err.response.data.notification , { root: true })
+                            this.$store.dispatch('notification/add', err.response.data.notification)
                         }
                     })
             } else {
                 this.showAndHideErrorMessage()
             }
         },
-        openRemovePlayerAction(){
-            this.displayRemovePlayerBox = true
-        },
-        hideRemovePlayerAction(){
-            this.displayRemovePlayerBox = false
-        },
         removePlayer(){
             if(this.playerToRemove){
                 services.removePlayer({ dayId: this.dayId, divisionId: this.divisionId, teamId: this.teamId, playerId: this.playerToRemove })
                     .then(res => {
                         this.team = res.data.updatedTeam,
-                        this.$store.dispatch("notification/add", res.data.notification , { root: true })
-                        this.hideRemovePlayerAction()
-                        this.showTeamActions()                        
+                        this.showAndHideNotification()
+                        this.hideElements('displayRemovePlayerBox')
+                        this.showElements('teamActions')                        
                     })
                     .catch(err => console.log(err))
             } else {
                 this.showAndHideErrorMessage()
             }
         },
-        showAndHideErrorMessage(){
-            this.message = 'Please make a selection'
-            setTimeout( () => {
-                this.message = null
-            }, 4000)
-        },
-        hideTeamActions(){
-            this.teamActions = false
-        },
-        showTeamActions(){
-            this.teamActions = true
-        },
-        hideTransferTeamAction(){
-            this.displayTransferTeamBox = false
-        },
-        showTransferTeamAction(){
-            this.displayTransferTeamBox = true
-        },
         transferTeam(){
             services.transferTeamBetweenDivisions({dayId: this.dayId, teamId: this.teamId, currentDivisionId: this.divisionId, divisionToTransferToId: this.divisionToTransferTo})
             .then(res => {
-                this.$store.dispatch('notification/add', res.data.notification)
+                this.showAndHideNotification()
                 this.$router.push({ name:'AdminHome' })
             })
             .catch(err => {
                 console.log(err)
             })
+        },
+        deleteTeam(){
+            services.deleteTeam({ dayId:this.dayId, divisionId: this.divisionId, teamId: this.teamId })
+                .then(res => {
+                    this.$router.push({ name: 'AdminHome' })
+                    this.showAndHideNotification()
+                })
+                .catch(err => console.log(err))
         }
-  },
-  created() {
+    },
+    created() {
         this.setTeamDivision(),
         this.fetchTeam()
-  },
+    },
     computed: {
         ...mapGetters(['getDivisionById', 'getDayById']),
         ...mapState(['allPlayers'])
-  }
+    }
 };
 </script>
 
