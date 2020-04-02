@@ -123,6 +123,7 @@
 
 <script>
 import { mapGetters, mapState } from "vuex"
+import {showElements, hideElements}  from '../../utils/commonMethods'
 import services from "../../services/event-service"
   
 export default {
@@ -147,12 +148,8 @@ export default {
         }
     },
     methods: {
-        showElements(...propertyNames){
-            propertyNames.forEach(name => this[name] = true)
-        },
-        hideElements(...propertyNames){
-            propertyNames.forEach(name => this[name] = false)
-        },
+        showElements: showElements,
+		hideElements: hideElements,
         showAndHideErrorMessage(){
             this.message = 'Please make a selection'
             setTimeout( () => {
@@ -176,7 +173,7 @@ export default {
                 })
                 .catch(err => console.log(err))
         },
-        showAndHideNotification(){
+        showAndHideNotification(res){
             this.$store.dispatch('notification/add', res.data.notification)
         },
         addPlayer(){
@@ -184,13 +181,15 @@ export default {
                 services.addPlayer({ dayId: this.dayId, divisionId: this.divisionId, teamId: this.teamId, playerId: this.playerToAdd })
                     .then(res => {
                         this.team = res.data.updatedTeam,
-                        this.showAndHideNotification()
+                        this.showAndHideNotification(res)
                         this.hideElements('displayAddPlayerBox')
                         this.showElements('teamActions')
                     })
                     .catch(err => {
                         if(err.response.status == 409) {
                             this.$store.dispatch('notification/add', err.response.data.notification)
+                        } else {
+                            console.log(err)
                         }
                     })
             } else {
@@ -202,7 +201,7 @@ export default {
                 services.removePlayer({ dayId: this.dayId, divisionId: this.divisionId, teamId: this.teamId, playerId: this.playerToRemove })
                     .then(res => {
                         this.team = res.data.updatedTeam,
-                        this.showAndHideNotification()
+                        this.showAndHideNotification(res)
                         this.hideElements('displayRemovePlayerBox')
                         this.showElements('teamActions')                        
                     })
@@ -214,7 +213,7 @@ export default {
         transferTeam(){
             services.transferTeamBetweenDivisions({dayId: this.dayId, teamId: this.teamId, currentDivisionId: this.divisionId, divisionToTransferToId: this.divisionToTransferTo})
             .then(res => {
-                this.showAndHideNotification()
+                this.showAndHideNotification(res)
                 this.$router.push({ name:'AdminHome' })
             })
             .catch(err => {
@@ -225,7 +224,7 @@ export default {
             services.deleteTeam({ dayId:this.dayId, divisionId: this.divisionId, teamId: this.teamId })
                 .then(res => {
                     this.$router.push({ name: 'AdminHome' })
-                    this.showAndHideNotification()
+                    this.showAndHideNotification(res)
                 })
                 .catch(err => console.log(err))
         }

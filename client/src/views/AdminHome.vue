@@ -9,7 +9,7 @@
 				<div class="d-flex flex-row flex-wrap" v-if="days">
 					<button v-for="(day, index) in days" :key="day._id" class="btn btn-outline-dark mx-2"
 						@click.prevent="saveIdOfSelectedDay(day._id); setDayDivisions(day._id); 
-						showDivisions(); hideTeams(); showDeleteDay(); hideDeleteAndEditDivision()">
+						showElements('displayDivisions','displayDeleteDay'); hideElements('displayTeams','displayDeleteAndEditDivision')">
 						{{ day.name }}
 					</button>
 				</div>
@@ -59,7 +59,7 @@
 				<div class="d-flex flex-row flex-wrap" v-if="divisionsInSelectedDay.length > 0">
 					<button v-for="division in divisionsInSelectedDay" :key="division._id" class="btn btn-outline-dark mx-2"
 						@click.prevent="saveIdOfSelectedDivision(division._id); setDivisionTeams(division._id); 
-						showTeams(); showDeleteAndEditDivision()">
+						showElements('displayTeams','displayDeleteAndEditDivision')">
 						{{ division.name }}
 					</button>
 				</div>
@@ -73,7 +73,7 @@
 				</router-link>
 
 				<div v-if="displayDeleteAndEditDivision">
-					<button @click="deleteDivision(); hideDeleteAndEditDivision(); hideTeams(); hideDivisions()" 
+					<button @click="deleteDivision(); hideElements('displayDeleteAndEditDivision','displayTeams','displayDivisions')" 
 						class="btn btn-outline-danger m-0">
 						Delete Division
 					</button>
@@ -110,6 +110,7 @@
 <script>
 import { mapState } from 'vuex'
 import { mapGetters } from 'vuex'
+import {showElements, hideElements}  from '../utils/commonMethods'
 
 export default {
     data() {
@@ -141,42 +142,16 @@ export default {
 			let selectedDivision = this.getDivisionById(divisionId)
 			this.teamsInSelectedDivision = selectedDivision.teams
 		},
-		showDivisions(){
-        	this.displayDivisions = true
-		},
-		hideDivisions(){
-			this.displayDivisions = false
-		},	
-		showTeams() {
-        	this.displayTeams = true
-		},
-		hideTeams(){
-			this.displayTeams = false
-		},
-		showDeleteAndEditDivision(){
-			this.displayDeleteAndEditDivision = true
-		},
-		hideDeleteAndEditDivision(){
-			this.displayDeleteAndEditDivision = false
-		},
-		showDeleteDay(){
-			this.displayDeleteDay = true
-		},
-		hideDeleteDay(){
-			this.displayDeleteDay = false
-		},
 		deleteLeagueDay(){
 			$('#staticBackdrop').modal('hide')
-			this.hideDeleteDay()
-			this.hideDivisions()
+			this.hideElements('displayDeleteDays', 'displayDivisions')
 			this.$store.dispatch('deleteLeagueDay', this.selectedDayId)
 		},	  	  
       	deleteDivision() {
-        	this.$store.dispatch('deleteDivision', {
-          		dayId: this.selectedDayId,
-          		divisionId: this.selectedDivisionId
-			})	
-		}
+        	this.$store.dispatch('deleteDivision', { dayId: this.selectedDayId, divisionId: this.selectedDivisionId })	
+		},
+		showElements: showElements,
+		hideElements: hideElements
     },
     created() {
       	this.$store.dispatch('getDays')
