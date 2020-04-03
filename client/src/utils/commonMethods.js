@@ -1,20 +1,9 @@
-// export const namespaced = true
+function showElements(...propertyNames){
+    propertyNames.forEach(name => this[name] = true)
+}
 
-// export const helperMethods = {
-//     showElements: (...propertyNames) => {
-//         propertyNames.forEach(name => this[name] = true)
-//     },
-//     hideElements: (...propertyNames) => {
-//         propertyNames.forEach(name => this[name] = false)
-//     }
-// }
+function hideElements(...propertyNames){
+    propertyNames.forEach(name => this[name] = false)
+}
 
-    function showElements(...propertyNames){
-        propertyNames.forEach(name => this[name] = true)
-    }
-
-    function hideElements(...propertyNames){
-        propertyNames.forEach(name => this[name] = false)
-    }
-
-    export { showElements, hideElements }
+export { showElements, hideElements }

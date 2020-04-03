@@ -38,7 +38,7 @@
                 </button>
             </div>
             <div class="d-flex justify-content-center mt-4">
-                <button class="btn btn-outline-danger btnWidth60" @click.prevent="deleteTeam()">DELETE team</button>
+                <ConfirmModal modId="hardCoded" textRef="Team" action="Delete" @notify='deleteTeam()' class="btnWidth60"/>
             </div>
         </div>
         
@@ -123,11 +123,15 @@
 
 <script>
 import { mapGetters, mapState } from "vuex"
-import {showElements, hideElements}  from '../../utils/commonMethods'
+import { showElements, hideElements, returnRandomId }  from '../../utils/commonMethods'
 import services from "../../services/event-service"
-  
+import ConfirmModal from '../../components/ConfirmModal'
+
 export default {
     props: [ 'dayId', 'divisionId', 'teamId'],
+    components:{
+        ConfirmModal
+    },
     data() {
         return {
             divisionsToTransferTo: null,
@@ -144,12 +148,14 @@ export default {
             displayAddPlayerBox: false,
             displayRemovePlayerBox: false,
             displayTransferTeamBox: false,
-            teamActions: true
+            teamActions: true,
+            modalID: null
         }
     },
     methods: {
         showElements: showElements,
-		hideElements: hideElements,
+        hideElements: hideElements,
+        returnRandomId: returnRandomId,
         showAndHideErrorMessage(){
             this.message = 'Please make a selection'
             setTimeout( () => {
@@ -230,7 +236,7 @@ export default {
         }
     },
     created() {
-        this.setTeamDivision(),
+        this.setTeamDivision()
         this.fetchTeam()
     },
     computed: {

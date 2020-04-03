@@ -21,32 +21,8 @@
 				</router-link>
 
 				<div v-if="displayDeleteDay">
-					<button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#staticBackdrop">
-						Delete league
-					</button>
-					<!-- Modal -->
-					<div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog"
-						aria-labelledby="staticBackdropLabel" aria-hidden="true">
-						<div class="modal-dialog modal-dialog-centered" role="document">
-
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title text-center" id="staticBackdropLabel">Are you sure?</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-
-								<div class="modal-body">
-									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-									<button @click="deleteLeagueDay" type="button" class="btn btn-danger">Yes, I want to delete league day</button>
-								</div>
-							</div>
-
-						</div>
-					</div>
+					<ConfirmModal modId="hardCoded1" textRef="League" action="Delete" @notify='deleteLeagueDay()'/>
 				</div>
-
 			</div>
 		</div>
 		
@@ -59,7 +35,7 @@
 				<div class="d-flex flex-row flex-wrap" v-if="divisionsInSelectedDay.length > 0">
 					<button v-for="division in divisionsInSelectedDay" :key="division._id" class="btn btn-outline-dark mx-2"
 						@click.prevent="saveIdOfSelectedDivision(division._id); setDivisionTeams(division._id); 
-						showElements('displayTeams','displayDeleteAndEditDivision')">
+						showElements('displayTeams','displayDeleteAndEditDivision'); hideElements('displayDeleteDay')">
 						{{ division.name }}
 					</button>
 				</div>
@@ -73,10 +49,8 @@
 				</router-link>
 
 				<div v-if="displayDeleteAndEditDivision">
-					<button @click="deleteDivision(); hideElements('displayDeleteAndEditDivision','displayTeams','displayDivisions')" 
-						class="btn btn-outline-danger m-0">
-						Delete Division
-					</button>
+					<ConfirmModal modId="hardCoded2" textRef="Division" action="Delete" 
+					@notify="deleteDivision(); hideElements('displayDeleteAndEditDivision','displayTeams','displayDivisions')"/>
 				</div>
 			</div>
 		</div>
@@ -111,8 +85,12 @@
 import { mapState } from 'vuex'
 import { mapGetters } from 'vuex'
 import {showElements, hideElements}  from '../utils/commonMethods'
+import ConfirmModal from '../components/ConfirmModal'
 
 export default {
+	components: {
+		ConfirmModal
+	},
     data() {
       	return {
 			selectedDayId: null,
@@ -143,8 +121,7 @@ export default {
 			this.teamsInSelectedDivision = selectedDivision.teams
 		},
 		deleteLeagueDay(){
-			$('#staticBackdrop').modal('hide')
-			this.hideElements('displayDeleteDays', 'displayDivisions')
+			this.hideElements('displayDeleteDay', 'displayDivisions')
 			this.$store.dispatch('deleteLeagueDay', this.selectedDayId)
 		},	  	  
       	deleteDivision() {
@@ -161,7 +138,7 @@ export default {
 		...mapState(['days', 'allDivisions']),
 		...mapGetters(['getDayById', 'getDivisionById'])	  	
     }
-  }
+}
 </script>
 
 <style scoped>
