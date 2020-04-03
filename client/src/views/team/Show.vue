@@ -53,12 +53,7 @@
                     <hr>
 
                     <div v-if="allPlayers">
-                        <h6 class="card-subtitle mb-2 text-muted">Select one:</h6>
-                        <select class="custom-select" id="playerToAdd" v-model="playerToAdd">
-                            <option v-for="player in allPlayers" :value="player._id">
-                                {{ player.firstName }} {{ player.lastName }}
-                            </option>
-                        </select>
+                        <PlayerSelect v-model="playerToAdd" :arrOfPlayers="allPlayers"/>
                     </div>
 
                     <button class="btn btn-outline-success btn-small mt-3" @click.prevent="addPlayer()">Add</button>
@@ -76,13 +71,8 @@
                     </div>
                     <hr>
 
-                    <div v-if="team">
-                        <h6 class="card-subtitle mb-2 text-muted">Select one:</h6>
-                        <select class="custom-select" v-model="playerToRemove">
-                            <option v-for="player in team.players" :value="player._id">
-                                {{ player.firstName }} {{ player.lastName }}
-                            </option>
-                        </select>
+                    <div v-if="team">                      
+                        <PlayerSelect v-model="playerToRemove" :arrOfPlayers="team.players"/>
                     </div>
 
                     <button class="btn btn-outline-danger btn-small mt-3" @click.prevent="removePlayer()">Remove</button>
@@ -123,14 +113,16 @@
 
 <script>
 import { mapGetters, mapState } from "vuex"
-import { showElements, hideElements, returnRandomId }  from '../../utils/commonMethods'
+import { showElements, hideElements }  from '../../utils/commonMethods'
 import services from "../../services/event-service"
 import ConfirmModal from '../../components/ConfirmModal'
+import PlayerSelect from '../../components/PlayerSelect'
 
 export default {
     props: [ 'dayId', 'divisionId', 'teamId'],
     components:{
-        ConfirmModal
+        ConfirmModal,
+        PlayerSelect
     },
     data() {
         return {
@@ -155,7 +147,6 @@ export default {
     methods: {
         showElements: showElements,
         hideElements: hideElements,
-        returnRandomId: returnRandomId,
         showAndHideErrorMessage(){
             this.message = 'Please make a selection'
             setTimeout( () => {
