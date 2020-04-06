@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h6 class="card-subtitle mb-2 text-muted">Select one:</h6>
         <select class="custom-select" @input="sendValue($event.target.value)">
             <option :value="null">Player</option>
             <option v-for="player in arrOfPlayers" :value="player._id">

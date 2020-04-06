@@ -4,6 +4,7 @@ import axios from "axios";
 import router from '../router/index'
 import services from '../services/event-service'
 import * as notification from '@/store/modules/notification'
+
 Vue.use(Vuex);
 Vue.use(router)
 
@@ -12,7 +13,9 @@ export default new Vuex.Store({
         user: null,
         days: null,
         allDivisions: null,
-        allPlayers: null
+        allPlayers: null,
+        //adminActions
+        team:null
     },
     mutations: {
         SET_USER_DATA(state, userData) {
@@ -40,6 +43,9 @@ export default new Vuex.Store({
         UPDATE_DAY(state, updatedDay) {
             let indexOfDay = state.days.findIndex(day => day._id == updatedDay._id)
             state.days[indexOfDay] = updatedDay
+        },
+        SET_TEAM(state, teamData) {
+            state.team = teamData
         },
         DELETE_DIVISION_FROM_DIVISIONS(state, deletedDivision) {
             state.allDivisions = state.allDivisions.filter(division => division._id !== deletedDivision._id)
@@ -115,10 +121,35 @@ export default new Vuex.Store({
                         type: 'error',
                         message: `There was a problem when deleting division: ${err} `
                     }
-                    dispatch('notification/add', notification, {
-                        root: true
-                    })
+                    dispatch('notification/add', notification, { root: true })
                 })
+        },
+        transferTeamBetweenDivisions({ dispatch }, {dayId, teamId, currentDivisionId, divisionToTransferToId}) {
+            services.transferTeamBetweenDivisions(dayId, teamId, currentDivisionId, divisionToTransferToId)
+                .then(res => {
+                    dispatch('notification/add', res.data.notification)
+                    router.push({ name:'AdminHome' })
+                })
+                .catch(err => console.log(err))
+        },
+        // -------------------------      TEAM      ------------------------------------
+        fetchTeam({ commit }, { dayId, divisionId, teamId}) {
+            services.getTeam(dayId, divisionId, teamId)
+                .then(res => {
+                    commit('SET_TEAM', res.data.team)
+                })
+                .catch(err => console.log(err))
+        },
+        updateTeam({commit}, updatedTeam) {
+            commit('SET_TEAM', updatedTeam)
+        },
+        deleteTeam({ dispatch }, { dayId, divisionId, teamId}) {
+            services.deleteTeam(dayId, divisionId, teamId)
+                .then(res => {
+                    dispatch('notification/add', res.data.notification)
+                    router.push({ name: 'AdminHome' })
+                })
+                .catch(err => console.log(err))
         },
         // -------------------------     PLAYERS    ------------------------------------
         getAllPlayers({ commit }) {
@@ -126,6 +157,29 @@ export default new Vuex.Store({
                 .then(res => {
                     commit('SET_ALL_PLAYERS', res.data.allPlayers)
                 })
+                .catch(err => console.log(err))
+        },
+        addTeamPlayer({ commit, dispatch }, { dayId, divisionId, teamId, playerId }) {
+            services.addPlayer(dayId, divisionId, teamId, playerId)
+                .then(res => {
+                    commit('SET_TEAM', res.data.updatedTeam)
+                    dispatch('notification/add', res.data.notification, { root: true })
+                })
+                .catch(err => {
+                    if(err.response.status == 409) {
+                        dispatch('notification/add', err.response.data.notification)
+                    } else {
+                        console.log(err)
+                    }
+                })
+        },
+        removeTeamPlayer({ commit, dispatch }, { dayId, divisionId, teamId, playerId }) {
+            services.removePlayer(dayId, divisionId, teamId, playerId)
+                .then(res => {
+                    commit('SET_TEAM', res.data.updatedTeam)
+                    dispatch('notification/add', res.data.notification, { root: true })
+                })
+                .catch(err => console.log(err))
         }
     },
     getters: {

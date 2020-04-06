@@ -81,10 +81,12 @@ router.put('/', (req, res, next) => {
             } else {
                 divisionToTransferTo.teams.push(req.body.teamId)
                 divisionToTransferTo.save()
-                res.json({ notification: {
-                    message: `Successfully transfered team`,
-                    type: 'success'
-                } })
+                res.json({ 
+                    notification: {
+                        message: `Successfully transfered team`,
+                        type: 'success' 
+                    } 
+                })
             }
         })
     }
