@@ -74,7 +74,8 @@ router.post('/register', (req, res) => {
                                 res.status(201).json({
                                     message: 'Successfuly created user',
                                     token: token,
-                                    email: user.email
+                                    email: user.email,
+                                    isAdmin: user.isAdmin
                                 })
                             })
                             .catch(err => {
@@ -126,7 +127,8 @@ router.post('/login', (req, res) => {
                         message: 'Auth successful',
                         token: token,
                         email: user[0].email,
-                        firstName: user[0].firstName
+                        firstName: user[0].firstName,
+                        isAdmin: user[0].isAdmin
                     })
                 }
                 return res.status(401).json({

@@ -17,7 +17,7 @@ let userSchema = new Schema({
     // teams: [],
     firstName: String,
     lastName: String,
-    role: String,
+    isAdmin: {type: Boolean, default: false },
     primaryClub: String
 })
 
