@@ -72,17 +72,17 @@ router.beforeEach((to, from, next) => {
     const requiresAdmin = (to.matched.some(record => record.meta.isAdmin))
  
     if(requiresAuth && !loggedIn){
-        console.log('not logged in')
+        //not logged in
         next({name: 'Login'})
     } else if(requiresAuth && !requiresAdmin && loggedIn) {
-        console.log('doesnt require admin')
+        //doesn't require admin
         next()
     } else if(requiresAuth && requiresAdmin && loggedIn){
         if(loggedIn.isAdmin) {
-            console.log('aparently is admin')
+            //Admin
             next()
         } else {
-            console.log('not ad admin cant go')
+            //not allowed for non admins
             next('/')
         }
     }
