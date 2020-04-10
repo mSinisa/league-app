@@ -65,6 +65,7 @@ export default new Vuex.Store({
             return axios.post("//localhost:8082/login", credentials)
                 .then(({ data }) => {
                     commit("SET_USER_DATA", data);
+                    router.push({name:'About'})
                 });
         },
         logout({ commit }) {
