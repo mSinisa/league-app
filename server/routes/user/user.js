@@ -4,20 +4,9 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const verifyToken = require('../../middleware/checkAuth')
+const isAdmin = require('../../middleware/adminCheck')
 const User = require('../../models/User')
-// const Team = require('../../models/Team')
-
-// router.get('/', (req, res) => {
-//     User.find({}, (err, foundUsers) => {
-//         if (err) {
-//             console.log(err)
-//         } else {
-//             res.json({
-//                 allPlayers: foundUsers
-//             })
-//         }
-//     })
-// })
+const currentUser = require('../../middleware/currentUser')
 
 router.post('/register', (req, res) => {
     User.find({
@@ -71,6 +60,8 @@ router.post('/register', (req, res) => {
                                 //         })
                                 //     }
                                 // })
+                                //SAVING USER TO REQ. OBJ
+                                // app.locals.user = user
                                 res.status(201).json({
                                     message: 'Successfuly created user',
                                     token: token,
@@ -123,6 +114,8 @@ router.post('/login', (req, res) => {
                             expiresIn: '1h'
                         }
                     )
+                    //SAVING USER TO REQ. OBJ
+                    currentUser.info = user[0]
                     return res.status(200).json({
                         message: 'Auth successful',
                         token: token,
@@ -162,7 +155,7 @@ router.post('/login', (req, res) => {
 //         })
 // })
 
-router.get('/about', verifyToken, (req, res) => {
+router.get('/about', verifyToken, isAdmin, (req, res, next) => {
     jwt.verify(req.token, 'the_secret_key', err => {
         if (err) {
             res.sendStatus(401)
@@ -178,7 +171,7 @@ router.get('/about', verifyToken, (req, res) => {
                     name: 'third',
                     id: 3
                 }]
-            }).status(200)
+            })
         }
     })
 })

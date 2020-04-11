@@ -7,6 +7,7 @@ import vuetify from './plugins/vuetify'
 import NavTop from '@/components/NavTop'
 import NavBottom from '@/components/NavBottom'
 import NotificationContainer from '@/components/NotificationContainer'
+import apiClient from './services/event-service'
 
 Vue.component('NavTop', NavTop)
 Vue.component('NavBottom', NavBottom)
@@ -15,24 +16,14 @@ Vue.component('NotificationContainer', NotificationContainer)
 Vue.config.productionTip = false
 
 new Vue({
-  router,
-  store,
-  created() {
-    const userString = localStorage.getItem('user')
-    if (userString) {
-      const userData = JSON.parse(userString)
-      this.$store.commit('SET_USER_DATA', userData)
-    }
-    axios.interceptors.response.use(
-      response => response,
-      error => {
-        if (error.response.status === 401) {
-          this.$store.dispatch('Logout')
+    router,
+    store,
+    created() {
+        const userString = localStorage.getItem('user')
+        if (userString) {
+            const userData = JSON.parse(userString)
+            this.$store.commit('SET_USER_DATA', userData)
         }
-        return Promise.reject(error)
-      }
-
-    )
-  },
-  render: h => h(App)
+    },
+    render: h => h(App)
 }).$mount('#app')

@@ -5,16 +5,29 @@
 </template>
 
 <script>
-import { authComputed } from "../store/helpers";
+import { authComputed } from "../store/helpers"
+import services from '../services/event-service'
 export default {
   computed: {
     ...authComputed
   },
   methods: {
-    logout() {
-      // console.log('logout')
-      this.$store.dispatch("logout");
+    getEvents() {
+      services.getEvents()
+      .then(res => {
+        console.log(res.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
     }
+    // logout() {
+    //   // console.log('logout')
+    //   this.$store.dispatch("logout");
+    // }
+  },
+  created(){
+    this.getEvents()
   }
 };
 </script>

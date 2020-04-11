@@ -1,10 +1,30 @@
 import axios from 'axios'
-
+import store from '../store/index'
 const apiClient = axios.create({
-    baseURL: 'http://localhost:8082'
+    baseURL: 'http://localhost:8082',
+    headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json"
+      }
 });
 
+    apiClient.interceptors.response.use( 
+        response => response,
+        error => {
+            if (error.response.status === 401) {
+                store.dispatch('logout')
+            }
+            return Promise.reject(error)
+        }
+    )
+
 export default {
+    login(credentials) {
+        return apiClient.post('/login', credentials)
+    },
+    register(credentials) {
+        return apiClient.post('/register', credentials)
+    },
     //ADMIN
     getDays() {
         return apiClient.get("/admin/days");
@@ -48,5 +68,11 @@ export default {
     },
     removePlayer(dayId, divisionId, teamId, playerId) {
         return apiClient.delete(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}/teamPlayers/${playerId}`)
+    },
+    // TEST
+    getEvents(){
+        return apiClient.get('/about')
     }
 }
+
+export { apiClient }
