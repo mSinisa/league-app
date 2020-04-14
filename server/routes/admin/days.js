@@ -2,8 +2,10 @@ const express = require('express')
 const router = express.Router()
 const Day = require('../../models/Day')
 const Division = require('../../models/Division')
+const verifyToken = require('../../middleware/checkAuth')
+const isAdmin = require('../../middleware/adminCheck')
 
-router.get('/', (req, res, next) => {
+router.get('/', verifyToken, (req, res, next) => {
     Day.find({}).populate('divisions').exec((err, foundDays) => {
         if (err) {
             next(err)
@@ -15,7 +17,7 @@ router.get('/', (req, res, next) => {
     })
 })
 
-router.get('/divisions', (req, res, next) => {
+router.get('/divisions', verifyToken, (req, res, next) => {
     Division.find({}).populate('teams').exec((err, allDivisions) => {
         if (err) {
             next(err)
@@ -27,7 +29,7 @@ router.get('/divisions', (req, res, next) => {
     })
 })
 
-router.post('/', (req, res, next) => {
+router.post('/', verifyToken, isAdmin, (req, res, next) => {
     let newLeagueDay = { name: req.body.name }
     Day.create(newLeagueDay, (err, createdDay) => {
         if (err) {
@@ -44,7 +46,7 @@ router.post('/', (req, res, next) => {
     })
 })
 
-router.delete('/:dayId', (req, res, next) => {
+router.delete('/:dayId', verifyToken, isAdmin, (req, res, next) => {
     if(req.params.dayId){
         Day.findByIdAndDelete(req.params.dayId, (err, deletedLeagueDay) => {
             if(err){

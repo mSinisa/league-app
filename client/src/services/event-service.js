@@ -13,6 +13,10 @@ const apiClient = axios.create({
         error => {
             if (error.response.status === 401) {
                 store.dispatch('logout')
+                const notification = { message: 'Unauthorised action. You have been logged out',
+                    type: 'error'
+                }
+                store.dispatch('notification/add', notification, {root:true})
             }
             return Promise.reject(error)
         }

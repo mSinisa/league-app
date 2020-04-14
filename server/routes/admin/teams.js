@@ -2,9 +2,11 @@ const express = require('express')
 const router = express.Router({ mergeParams: true })
 const Division = require('../../models/Division')
 const Team = require('../../models/Team')
+const verifyToken = require('../../middleware/checkAuth')
+const isAdmin = require('../../middleware/adminCheck')
 
 //SHOW Team
-router.get('/:teamId', (req, res, next) => {
+router.get('/:teamId', verifyToken, (req, res, next) => {
     if(req.params.teamId && req.params.divisionId && req.params.dayId) {
         Team.findById(req.params.teamId).populate('players').exec((err, foundTeam) => {
             if (!err) {
@@ -16,7 +18,7 @@ router.get('/:teamId', (req, res, next) => {
     }
 })
 //NEW Team
-router.post('/', (req, res, next) => {
+router.post('/', verifyToken, isAdmin, (req, res, next) => {
     if(req.params.divisionId && req.params.dayId && req.body.name){
         Division.findById(req.params.divisionId, (err, foundDivision) => {
             if (err) {
@@ -46,7 +48,7 @@ router.post('/', (req, res, next) => {
     }
 })
 //Delete Team
-router.delete('/:teamId', (req, res, next) => {
+router.delete('/:teamId', verifyToken, isAdmin, (req, res, next) => {
     if(req.params.dayId && req.params.divisionId && req.params.teamId) {
        Division.findById(req.params.divisionId).populate('teams').exec((err, foundDivision) => {
            if(err){

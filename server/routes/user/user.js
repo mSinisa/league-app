@@ -4,14 +4,11 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const verifyToken = require('../../middleware/checkAuth')
-const isAdmin = require('../../middleware/adminCheck')
 const User = require('../../models/User')
 const currentUser = require('../../middleware/currentUser')
 
 router.post('/register', (req, res) => {
-    User.find({
-            email: req.body.email
-        })
+    User.find({ email: req.body.email })
         .exec()
         .then(user => {
             if (user.length >= 1) {
@@ -21,9 +18,7 @@ router.post('/register', (req, res) => {
             } else {
                 bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
                     if (err) {
-                        return res.status(500).json({
-                            error: err
-                        })
+                        return res.status(500).json({ error: err })
                     } else {
                         const user = new User({
                             _id: new mongoose.Types.ObjectId(),
@@ -33,35 +28,10 @@ router.post('/register', (req, res) => {
                             lastName: req.body.lastName,
                             primaryClub: req.body.primaryClub
                         })
-                        user
-                            .save()
+                        user.save()
                             .then(result => {
                                 console.log(result)
-                                const token = jwt.sign({
-                                    user
-                                }, 'the_secret_key')
-                                // Team.find({
-                                //     'name': {
-                                //         $in: [user.teams[0], user.teams[1]]
-                                //     }
-                                // }, (err, foundTeams) => {
-                                //     if (err) {
-                                //         console.log(err)
-                                //     } else {
-                                //         foundTeams.forEach(team => {
-                                //             team.players.push({
-                                //                 _id: user._id,
-                                //                 email: user.email,
-                                //                 firstName: user.firstName,
-                                //                 lastName: user.lastName,
-                                //                 teams: user.teams
-                                //             })
-                                //             team.save()
-                                //         })
-                                //     }
-                                // })
-                                //SAVING USER TO REQ. OBJ
-                                // app.locals.user = user
+                                const token = jwt.sign({ user }, 'the_secret_key', { expiresIn: '1h' })
                                 res.status(201).json({
                                     message: 'Successfuly created user',
                                     token: token,
@@ -106,15 +76,7 @@ router.post('/login', (req, res) => {
                     })
                 }
                 if (result) {
-                    const token = jwt.sign({
-                            email: user[0].email,
-                            userId: user[0]._id
-                        },
-                        'the_secret_key', {
-                            expiresIn: '1h'
-                        }
-                    )
-                    //SAVING USER TO REQ. OBJ
+                    const token = jwt.sign({ user:user[0] }, 'the_secret_key', { expiresIn: '1h' })                    
                     currentUser.info = user[0]
                     return res.status(200).json({
                         message: 'Auth successful',
@@ -155,7 +117,7 @@ router.post('/login', (req, res) => {
 //         })
 // })
 
-router.get('/about', verifyToken, isAdmin, (req, res, next) => {
+router.get('/about', verifyToken, (req, res, next) => {
     jwt.verify(req.token, 'the_secret_key', err => {
         if (err) {
             res.sendStatus(401)

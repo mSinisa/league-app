@@ -2,8 +2,10 @@ const express = require('express')
 const router = express.Router({ mergeParams: true })
 const Team = require('../../models/Team')
 const User = require('../../models/User')
+const verifyToken = require('../../middleware/checkAuth')
+const isAdmin = require('../../middleware/adminCheck')
 
-router.post('/', (req, res, next) => {
+router.post('/', verifyToken, isAdmin, (req, res, next) => {
     if(req.params.dayId && req.params.divisionId && req.params.teamId && req.body.playerId) {
         Team.findById(req.params.teamId).populate('players').exec((err, foundTeam) => {
             if (err) {
@@ -47,7 +49,7 @@ router.post('/', (req, res, next) => {
     }
 })
 
-router.delete('/:playerId', (req, res, next) => {
+router.delete('/:playerId', verifyToken, isAdmin, (req, res, next) => {
     if(req.params.dayId && req.params.divisionId && req.params.teamId && req.params.playerId) {
         Team.findById(req.params.teamId).populate('players').exec((err, foundTeam) => {
             if (err) {

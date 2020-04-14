@@ -3,9 +3,11 @@ const router = express.Router({ mergeParams: true })
 const Day = require('../../models/Day')
 const Division = require("../../models/Division")
 const Team = require('../../models/Team')
+const verifyToken = require('../../middleware/checkAuth')
+const isAdmin = require('../../middleware/adminCheck')
 
 //NEW
-router.post('/', (req, res, next) => {
+router.post('/', verifyToken, isAdmin, (req, res, next) => {
     if (req.params.dayId) {
         Day.findById(req.params.dayId).populate('divisions').exec((err, foundDay) => {
             if (err) {
@@ -34,7 +36,7 @@ router.post('/', (req, res, next) => {
 })
 
 //DELETE
-router.delete('/:divisionId', (req, res, next) => {
+router.delete('/:divisionId', verifyToken, isAdmin, (req, res, next) => {
     if (req.params.divisionId && req.params.dayId) {
         //DELETE Division reference from Day
         Day.findById(req.params.dayId).populate('divisions').exec((err, foundDay) => {
@@ -64,7 +66,7 @@ router.delete('/:divisionId', (req, res, next) => {
 })
 
 //TRANSFER team between divisions
-router.put('/', (req, res, next) => {
+router.put('/', verifyToken, isAdmin, (req, res, next) => {
     if(req.params.dayId && req.body.currentDivisionId && req.body.teamId && req.body.divisionToTransferToId) {
         Division.findById(req.body.currentDivisionId, (err, currentTeamDivision) => {
             if(err) {

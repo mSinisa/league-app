@@ -2,12 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import axios from 'axios'
 import vuetify from './plugins/vuetify'
 import NavTop from '@/components/NavTop'
 import NavBottom from '@/components/NavBottom'
 import NotificationContainer from '@/components/NotificationContainer'
-import apiClient from './services/event-service'
 
 Vue.component('NavTop', NavTop)
 Vue.component('NavBottom', NavBottom)

@@ -39,24 +39,36 @@ const routes = [{
         path: '/admin/days/new',
         name: 'NewDay',
         component: () => import(/* webpackChunkName: "NewDay" */ '../views/day/New'),
+        meta: {
+            requiresAuth: true, isAdmin: true
+        }
     },
     {
         path: '/admin/days/:dayId/divisions/new',
         name: 'NewDivision',
         component: () => import(/* webpackChunkName: "NewDivision" */ '../views/division/New'),
-        props: true
+        props: true,
+        meta: {
+            requiresAuth: true, isAdmin: true
+        }
     },
     {
         path: '/admin/days/:dayId/divisions/:divisionId/teams/new',
         name: 'NewTeam',
         component: () => import(/* webpackChunkName: "NewTeam" */ '../views/team/New'),
-        props: true
+        props: true,
+        meta: {
+            requiresAuth: true, isAdmin: true
+        }
     },
     {
         path: '/admin/days/:dayId/divisions/:divisionId/teams/:teamId',
         name: 'ShowTeam',
         component: () => import(/* webpackChunkName: "About" */ '../views/team/Show'),
-        props: true
+        props: true,
+        meta: {
+            requiresAuth: true, isAdmin: true
+        }
     }
 ]
 
