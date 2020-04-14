@@ -8,13 +8,19 @@ router.get('/', (req, res) => {
 })
 
 router.get('/allPlayers', verifyToken, (req, res, next) => {
-    User.find({ isAdmin: false }, (err, allPlayers) => {
-        if(err){
-            next(err)
+    jwt.verify(req.token, process.env.SECRET , err => {
+        if(err) {
+            res.sendStatus(401)
         } else {
-            res.json({ allPlayers: allPlayers })
+            User.find({ isAdmin: false }, (err, allPlayers) => {
+                if(err){
+                    next(err)
+                } else {
+                    res.json({ allPlayers: allPlayers })
+                }
+            })
         }
-    })
+    })    
 })
 
 module.exports = router

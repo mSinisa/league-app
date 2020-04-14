@@ -31,7 +31,7 @@ router.post('/register', (req, res) => {
                         user.save()
                             .then(result => {
                                 console.log(result)
-                                const token = jwt.sign({ user }, 'the_secret_key', { expiresIn: '1h' })
+                                const token = jwt.sign({ user }, process.env.SECRET, { expiresIn: '1h' })
                                 res.status(201).json({
                                     message: 'Successfuly created user',
                                     token: token,
@@ -76,7 +76,7 @@ router.post('/login', (req, res) => {
                     })
                 }
                 if (result) {
-                    const token = jwt.sign({ user:user[0] }, 'the_secret_key', { expiresIn: '1h' })                    
+                    const token = jwt.sign({ user:user[0] }, process.env.SECRET, { expiresIn: '1h' })                    
                     currentUser.info = user[0]
                     return res.status(200).json({
                         message: 'Auth successful',
@@ -118,7 +118,7 @@ router.post('/login', (req, res) => {
 // })
 
 router.get('/about', verifyToken, (req, res, next) => {
-    jwt.verify(req.token, 'the_secret_key', err => {
+    jwt.verify(req.token, process.env.SECRET, err => {
         if (err) {
             res.sendStatus(401)
         } else {
