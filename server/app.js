@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const cors = require('cors')
+require('dotenv').config()
 
 const userRoutes = require('./routes/user/user')
 const adminRoutes = require('./routes/admin/admin')
@@ -12,7 +13,7 @@ const teamPlayerRoutes = require('./routes/admin/teamPlayers')
 
 const app = express()
 
-mongoose.connect('mongodb+srv://username:pass@cluster0-pxdmd.mongodb.net/leagueNew?retryWrites=true&w=majority', 
+mongoose.connect('mongodb+srv://xxxx:xxxx@cluster0-pxdmd.mongodb.net/leagueNew?retryWrites=true&w=majority', 
     { useNewUrlParser: true, useUnifiedTopology: true })
         .then(console.log("db connected"))
         .catch(err => {
@@ -29,8 +30,16 @@ app.use("/admin/days", dayRoutes)
 app.use("/admin/days/:dayId/divisions", divisionRoutes)
 app.use('/admin/days/:dayId/divisions/:divisionId/teams', teamRoutes)
 app.use('/admin/days/:dayId/divisions/:divisionId/teams/:teamId/teamPlayers', teamPlayerRoutes)
+
 app.use((req, res, next) => {
     res.status(404).json({error:{message: 'Page not found'}})
+})
+
+// handle errors from anywhere in the application
+app.use((error, req, res, next) => {
+    res.status(error.status || 500).json({ 
+        error: { message: error.message || 'Oops!! Something went wrong.'}
+    })
 })
 //SERVER
 const port = 8082
