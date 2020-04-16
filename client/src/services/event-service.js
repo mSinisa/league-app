@@ -5,22 +5,25 @@ const apiClient = axios.create({
     headers: {
         Accept: "application/json, text/plain, */*",
         "Content-Type": "application/json"
-      }
+    }
 });
 
-    apiClient.interceptors.response.use( 
-        response => response,
-        error => {
-            if (error.response.status === 401) {
-                store.dispatch('logout')
-                const notification = { message: 'Unauthorised action. You have been logged out',
-                    type: 'error'
-                }
-                store.dispatch('notification/add', notification, {root:true})
+apiClient.interceptors.response.use(
+    response => response,
+    error => {
+        if (error.response.status === 401) {
+            store.dispatch('logout')
+            const notification = {
+                message: error.response.data.message || 'Oops something went wrong',
+                type: 'error'
             }
-            return Promise.reject(error)
+            store.dispatch('notification/add', notification, {
+                root: true
+            })
         }
-    )
+        return Promise.reject(error)
+    }
+)
 
 export default {
     login(credentials) {
@@ -50,8 +53,8 @@ export default {
     deleteDivision(dayId, divisionId) {
         return apiClient.delete(`/admin/days/${dayId}/divisions/${divisionId}`)
     },
-    transferTeamBetweenDivisions(dayId, teamId, currentDivisionId, divisionToTransferToId){
-        return apiClient.put(`/admin/days/${dayId}/divisions`, {teamId, currentDivisionId, divisionToTransferToId})
+    transferTeamBetweenDivisions(dayId, teamId, currentDivisionId, divisionToTransferToId) {
+        return apiClient.put(`/admin/days/${dayId}/divisions`, { teamId, currentDivisionId, divisionToTransferToId })
     },
     //TEAM
     createTeam(data, dayId, divisionId) {
@@ -68,15 +71,17 @@ export default {
         return apiClient.get('/admin/allPlayers')
     },
     addPlayer(dayId, divisionId, teamId, playerId) {
-        return apiClient.post(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}/teamPlayers`, {playerId})
+        return apiClient.post(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}/teamPlayers`, { playerId })
     },
     removePlayer(dayId, divisionId, teamId, playerId) {
         return apiClient.delete(`/admin/days/${dayId}/divisions/${divisionId}/teams/${teamId}/teamPlayers/${playerId}`)
     },
     // TEST
-    getEvents(){
+    getEvents() {
         return apiClient.get('/about')
     }
 }
 
-export { apiClient }
+export {
+    apiClient
+}

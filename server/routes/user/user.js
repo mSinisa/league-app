@@ -26,7 +26,8 @@ router.post('/register', (req, res) => {
                             password: hashedPassword,
                             firstName: req.body.firstName,
                             lastName: req.body.lastName,
-                            primaryClub: req.body.primaryClub
+                            primaryClub: req.body.primaryClub,
+                            isAdmin: false
                         })
                         user.save()
                             .then(result => {
@@ -65,7 +66,7 @@ router.post('/login', (req, res) => {
         .then(user => {
             if (user.length < 1) {
                 return res.status(401).json({
-                    message: 'Auth failed'
+                    message: 'Auth failed. Please enter correct email'
                 })
             }
             bcrypt.compare(req.body.password, user[0].password, (err, result) => {
@@ -87,7 +88,7 @@ router.post('/login', (req, res) => {
                     })
                 }
                 return res.status(401).json({
-                    message: 'Auth failed'
+                    message: 'Auth failed. Password Incorrect'
                 })
             })
         })

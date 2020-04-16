@@ -29,13 +29,14 @@ export default {
     data() {
         return {
             email: null,
-            password: null,
-            currentUser: null
+            password: null
         }
     },
     methods: {
         login() {
-            this.$store.dispatch("login", { email: this.email, password: this.password })
+            if(this.email && this.password) {
+                this.$store.dispatch("login", { email: this.email, password: this.password })
+            }
         }
     }
 }

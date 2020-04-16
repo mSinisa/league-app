@@ -44,7 +44,7 @@ router.get('/divisions', verifyToken, (req, res, next) => {
 router.post('/', verifyToken, isAdmin, (req, res, next) => {
     jwt.verify(req.token, process.env.SECRET, err => { 
         if(err) {
-            res.sendStatus(401)
+            res.status(401)
         } else {
             let newLeagueDay = { name: req.body.name }
             Day.create(newLeagueDay, (err, createdDay) => {
