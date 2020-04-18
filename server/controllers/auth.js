@@ -56,8 +56,6 @@ exports.register = async (req, res) => {
 			success: false,
 			message: 'Server Error',
 		})
-
-		console.log(JSON.stringify(error))
 	}
 }
 
