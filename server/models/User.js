@@ -35,8 +35,12 @@ userSchema.pre('save',async function(next) {
 	//run if password was modified
 	if(!this.isModified('password')) return next()
 	//hash the password with cost of 12
-	this.password =await bcrypt.hash(this.password, 12)
+	this.password = await bcrypt.hash(this.password, 12)
 	next()
 })
+
+userSchema.methods.passwordsAreMatching = async function(candidatePassword, userPassword){
+	return await bcrypt.compare(candidatePassword, userSchema)
+}
 
 module.exports = mongoose.model('User', userSchema)
