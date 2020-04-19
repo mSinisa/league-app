@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const bcrypt = require('bcrypt')
 
 let userSchema = new Schema({
 	email: {
@@ -27,6 +28,12 @@ let userSchema = new Schema({
 	},
 	primaryClub: String
 	// teams: []
+})
+
+userSchema.pre('save',async function(next) {
+	if(!this.isModified('password')) return next()
+
+	this.password =await bcrypt.hash(this.password, 12)
 })
 
 module.exports = mongoose.model('User', userSchema)
