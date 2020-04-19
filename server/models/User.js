@@ -40,7 +40,7 @@ userSchema.pre('save',async function(next) {
 })
 
 userSchema.methods.passwordsAreMatching = async function(candidatePassword, userPassword){
-	return await bcrypt.compare(candidatePassword, userSchema)
+	return await bcrypt.compare(candidatePassword, userPassword)
 }
 
 module.exports = mongoose.model('User', userSchema)
