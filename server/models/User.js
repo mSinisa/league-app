@@ -11,7 +11,8 @@ let userSchema = new Schema({
 	},
 	password: {
 		type: String,
-		required: [true, 'Password is required']
+		required: [true, 'Password is required'],
+		select: false
 	},
 	phoneNumber: String,
 	firstName: { 
@@ -31,9 +32,11 @@ let userSchema = new Schema({
 })
 
 userSchema.pre('save',async function(next) {
+	//run if password was modified
 	if(!this.isModified('password')) return next()
-
+	//hash the password with cost of 12
 	this.password =await bcrypt.hash(this.password, 12)
+	next()
 })
 
 module.exports = mongoose.model('User', userSchema)
