@@ -23,11 +23,13 @@ let userSchema = new Schema({
 		type: String,
 		required: [true, 'Last name is required']
 	},
-	isAdmin: {
-		type: Boolean, 
-		default: false 
+	role: {
+		type: String,
+		enum: ['player', 'captain', 'admin'],
+		default: 'player'
 	},
-	primaryClub: String
+	primaryClub: String,
+	passwordChangedAt: Date
 	// teams: []
 })
 
@@ -41,6 +43,15 @@ userSchema.pre('save',async function(next) {
 
 userSchema.methods.passwordsAreMatching = async function(candidatePassword, userPassword){
 	return await bcrypt.compare(candidatePassword, userPassword)
+}
+
+userSchema.methods.changedPaswordAfter = function(JWTTimestamp) {
+	if(this.passwordChangedAt) {
+		const changedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10)
+		return JWTTimestamp < changedTimestamp
+	}
+	//False mean not changed
+	return false
 }
 
 module.exports = mongoose.model('User', userSchema)
