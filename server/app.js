@@ -1,9 +1,11 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
 const cors = require('cors')
 const dotenv = require('dotenv')
 dotenv.config({ path: './config.env' })
+
+const AppError = require('./utils/appError')
+const globalErrorHandler = require('./controllers/errorController')
 
 const authRoutes = require('./routes/auth')
 const userRoutes = require('./routes/user')
@@ -18,16 +20,6 @@ const app = express()
 app.use(bodyParser.json())
 app.use(cors())
 
-mongoose
-	.connect(process.env.MONGO_URI, {
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-	})
-	.then(console.log('db connected'))
-	.catch((err) => {
-		console.log(err)
-	})
-
 //ROUTES
 app.use(authRoutes)
 app.use(userRoutes)
@@ -40,18 +32,10 @@ app.use(
 	teamPlayerRoutes
 )
 
-app.use((req, res) => {
-	res.status(404).json({ error: { message: 'Page not found' } })
+app.all('*', (req, res, next) => {
+	next(new AppError(`Cannot find ${req.originalUrl} on this server!`, 404))
 })
 
-// handle errors
-// app.use((error, req, res, next) => {
-// 	res.status(error.status || 500).json({
-// 		error: { message: error.message || 'Oops!! Something went wrong.' },
-// 	})
-// })
-//SERVER
-const port = 8082
-app.listen(port, () => {
-	console.log(`app listening on port ${port}`)
-})
+app.use(globalErrorHandler)
+
+module.exports = app
