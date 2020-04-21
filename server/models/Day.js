@@ -1,15 +1,16 @@
 const mongoose = require('mongoose')
-Schema = mongoose.Schema
+const Schema = mongoose.Schema
 
 let daySchema = new Schema({
-    name: {
-        type: String,
-        unique: true
-    },
-    divisions: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Division'
-    }]
+	name: {
+		type: String,
+		unique: true,
+		required: [true, 'League day is required']
+	},
+	divisions: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Division'
+	}]
 })
 
-module.exports = mongoose.model('Day', daySchema)
+module.exports = mongoose.model('League', daySchema)

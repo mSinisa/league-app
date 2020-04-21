@@ -29,8 +29,11 @@ let userSchema = new Schema({
 		default: 'player'
 	},
 	primaryClub: String,
-	passwordChangedAt: Date
-	// teams: []
+	passwordChangedAt: Date,
+	teams: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Team'
+	}]
 })
 
 userSchema.pre('save',async function(next) {
